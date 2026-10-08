@@ -79,7 +79,7 @@ export function Faq() {
                 </button>
               </h3>
               <div className="faq-a" id={`${base}-${i}`} role="region" aria-labelledby={`${base}-q${i}`}>
-                <div><p>{f.a}</p></div>
+                <div><p>{f.a}{'link' in f && f.link && <> <a className="faq-policy-link" href={f.link.href}>{f.link.label}</a></>}</p></div>
               </div>
             </div>
           );

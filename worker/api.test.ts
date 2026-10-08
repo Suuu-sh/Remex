@@ -18,16 +18,19 @@ const validRequest = {
 
 function createEnv(options: {allowRequest?: boolean} = {}) {
   const inserts: unknown[][] = [];
+  const deletes: {sql: string; values: unknown[]}[] = [];
   const env = {
-    DB: {
-      prepare: () => ({
-        bind: (...values: unknown[]) => ({run: async () => { inserts.push(values); return {success: true}; }}),
-      }),
-    },
+    DB: {prepare: (sql: string) => ({
+      bind: (...values: unknown[]) => ({run: async () => {
+        if (sql.trimStart().startsWith('INSERT')) inserts.push(values);
+        if (sql.trimStart().startsWith('DELETE')) deletes.push({sql: sql.trim(), values});
+        return {success: true};
+      }}),
+    })},
     REQUEST_LIMITER: {limit: async () => ({success: options.allowRequest ?? true})},
     ASSETS: {fetch: async () => new Response('asset')},
   } as unknown as Env;
-  return {env, inserts};
+  return {env, inserts, deletes};
 }
 
 function post(body: unknown, extraHeaders: Record<string, string> = {}) {
@@ -65,4 +68,13 @@ test('Worker routes health checks and static assets', async () => {
   assert.deepEqual(await health.json(), {ok: true});
   const page = await worker.fetch(new Request('https://remex.example/'), env);
   assert.equal(await page.text(), 'asset');
+});
+
+test('scheduled cleanup deletes requests older than 180 days', async () => {
+  const {env, deletes} = createEnv();
+  const scheduledTime = Date.parse('2026-10-08T18:00:00.000Z');
+  await worker.scheduled({scheduledTime} as ScheduledController, env);
+  assert.equal(deletes.length, 1);
+  assert.equal(deletes[0].sql, 'DELETE FROM requests WHERE created_at < ?');
+  assert.equal(deletes[0].values[0], new Date(scheduledTime - 180 * 24 * 60 * 60 * 1000).toISOString());
 });

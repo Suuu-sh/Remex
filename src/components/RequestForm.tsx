@@ -174,13 +174,10 @@ export default function RequestForm() {
                   placeholder="相談したいことを自由にお書きください"
                 />
                 <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off"/></label>
-                <details className="privacy">
-                  <summary>個人情報の取り扱いについて <span aria-hidden="true">＋</span></summary>
-                  <p>お名前・メールアドレス・相談内容は、ご相談への対応と訪問の調整に使用します。公開環境では送信内容をCloudflare D1に保存し、迷惑送信対策にCloudflareのレート制限を利用します。対応に不要になった情報は運営者が削除します。保存期間、運営者の公開情報、問い合わせ窓口は正式運用前に整備します。第三者への販売や無断の事例公開は行いません。</p>
-                </details>
+                <p className="privacy">お名前・メールアドレス・相談内容は、お問い合わせへの回答や訪問の調整に利用します。受信日から180日を経過した相談データは削除します。<a href="#privacy">個人情報の取り扱い</a>をご確認ください。</p>
                 <label className="consent">
                   <input name="consent" type="checkbox" required/>
-                  <span>個人情報の取り扱いと、<a href="#service">サービス内容</a>・<a href="#safety">禁止事項</a>を確認し、同意します。</span>
+                  <span><a href="#privacy">個人情報の取り扱い</a>、<a href="#terms">利用・キャンセル条件</a>、<a href="#service">サービス内容</a>・<a href="#safety">禁止事項</a>を確認し、同意します。</span>
                 </label>
                 <button className="button submit" disabled={status === 'sending'}>
                   {status === 'sending' ? <><span className="spinner" aria-hidden="true"/>送信しています…</> : <>この内容で相談する <Arrow/></>}

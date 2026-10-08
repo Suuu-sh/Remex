@@ -3,6 +3,9 @@
   "name": "remex-site",
   "main": "./worker/index.ts",
   "compatibility_date": "2026-10-07",
+  "triggers": {
+    "crons": ["0 18 * * *"]
+  },
   "assets": {
     "directory": "./dist/",
     "binding": "ASSETS",

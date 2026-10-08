@@ -6,6 +6,7 @@ import Delivery from './components/Delivery';
 import UseCases from './components/UseCases';
 import {Area, Pricing, Process} from './components/Plan';
 import {Chapter, Faq, Safety} from './components/Trust';
+import PublicPolicies from './components/PublicPolicies';
 import RequestForm from './components/RequestForm';
 import {Footer, MobileCta} from './components/Footer';
 
@@ -28,6 +29,7 @@ export default function App() {
         <Safety/>
         <Chapter/>
         <Faq/>
+        <PublicPolicies/>
         <RequestForm/>
       </main>
       <Footer/>

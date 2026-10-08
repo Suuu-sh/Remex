@@ -7,6 +7,8 @@ export interface Env {
 }
 
 const MAX_BODY_BYTES = 20_000;
+const REQUEST_RETENTION_DAYS = 180;
+const DAY_MS = 24 * 60 * 60 * 1000;
 const jsonHeaders = {
   'Cache-Control': 'no-store',
   'Content-Type': 'application/json; charset=utf-8',
@@ -119,5 +121,9 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (new URL(request.url).pathname.startsWith('/api/')) return handleApi(request, env);
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
+    const cutoff = new Date(controller.scheduledTime - REQUEST_RETENTION_DAYS * DAY_MS).toISOString();
+    await env.DB.prepare('DELETE FROM requests WHERE created_at < ?').bind(cutoff).run();
   },
 } satisfies ExportedHandler<Env>;

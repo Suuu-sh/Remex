@@ -21,6 +21,8 @@ export function Footer() {
             <a href="#price">料金</a>
             <a href="#safety">安心への約束</a>
             <a href="#faq">よくある質問</a>
+            <a href="#privacy">個人情報の取り扱い</a>
+            <a href="#terms">利用・キャンセル条件</a>
           </nav>
           <small>© {new Date().getFullYear()} Remex <span>／</span> 東京23区・運営者対応</small>
         </div>
