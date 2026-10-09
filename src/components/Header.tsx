@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {usePageScroll} from '../hooks';
-import {Arrow} from './Icons';
 import LineButton from './LineButton';
 
 const links = [
@@ -13,7 +12,12 @@ const links = [
 ];
 
 export function Brand() {
-  return <a className="brand" href="#top" aria-label="Remex ホーム">remex<span><Arrow size={12}/></span></a>;
+  return (
+    <a className="brand" href="#top" aria-label="Remex ホーム">
+      <img className="brand-mark" src="/favicon.svg" alt="" aria-hidden="true"/>
+      <span className="brand-wordmark">remex</span>
+    </a>
+  );
 }
 
 export default function Header() {
