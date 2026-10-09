@@ -69,6 +69,21 @@ workflowはテスト、ビルド、リモートD1マイグレーション、Work
 npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at, mode FROM requests ORDER BY created_at DESC LIMIT 20"
 ```
 
+## LINEでの相談受付
+
+相談の主な窓口はLINE公式アカウントです。フォームはLINEを使っていない方向けに残しています。
+
+1. LINE公式アカウントを作成し、友だち追加URL（`https://lin.ee/xxxx`）を `src/content.ts` の `LINE_URL` に設定します。空のあいだ、LINEボタンはフォームへ案内します。
+2. あいさつメッセージに相談テンプレート（場所・希望日時・してほしいこと・写真/動画の希望）を設定します。
+3. フォームからの相談を運営者のLINEへ通知する場合は、Messaging APIを有効にし、Workerのsecretを登録します。未設定なら通知は送られません（受付自体は保存されます）。
+
+```sh
+npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN
+npx wrangler secret put LINE_ADMIN_USER_ID
+```
+
+`LINE_ADMIN_USER_ID` は通知を受け取る運営者のユーザーID（`U` から始まる文字列）で、LINE Developersのチャネル基本設定に表示されます。
+
 ## 運用開始前に残っているタスク
 
 - 運営者情報と外部向け問い合わせ窓口の表示内容を確定（未確認の個人情報は掲載しない）

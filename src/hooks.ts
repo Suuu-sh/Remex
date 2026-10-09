@@ -17,7 +17,7 @@ export function useRevealAll() {
         entry.target.setAttribute('data-in', '');
         observer.unobserve(entry.target);
       }),
-      {rootMargin: '0px 0px -8% 0px', threshold: 0.12},
+      {rootMargin: '0px 0px -8% 0px', threshold: 0.04},
     );
     targets.forEach(el => observer.observe(el));
     return () => observer.disconnect();
