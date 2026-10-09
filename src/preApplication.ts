@@ -1,18 +1,10 @@
 export type PreApplicationDraft = {
   place: string;
   purpose: string;
-  preferredDate1: string;
-  preferredDate2: string;
   plan: string;
   deliverables: string[];
   details: string;
 };
-
-function formatDate(value: string): string {
-  if (!value) return '未定';
-  const [date, time] = value.split('T');
-  return time ? `${date.replaceAll('-', '/')} ${time}` : date.replaceAll('-', '/');
-}
 
 function oneLine(value: string): string {
   return value.trim().replace(/[\r\n]+/g, ' ');
@@ -24,11 +16,9 @@ export function buildPreApplicationMessage(draft: PreApplicationDraft): string {
     '【Remex 事前相談】',
     `場所: ${oneLine(draft.place)}`,
     `相談内容: ${draft.purpose}`,
-    `希望日時（第1希望）: ${formatDate(draft.preferredDate1)}`,
-    `希望日時（第2希望）: ${formatDate(draft.preferredDate2)}`,
     `希望プラン: ${draft.plan || '相談して決めたい'}`,
     `希望する記録: ${deliverables}`,
-    '現地で確認してほしいこと:',
+    '詳細な内容:',
     draft.details.trim(),
   ].join('\n');
 }

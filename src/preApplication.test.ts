@@ -6,17 +6,15 @@ test('pre-application message includes the selected visit details without collec
   const message = buildPreApplicationMessage({
     place: '  渋谷駅\n南口 ',
     purpose: '引っ越し候補地の確認',
-    preferredDate1: '2026-10-12T14:30',
-    preferredDate2: '',
     plan: '60分（現地作業 ¥9,900）',
     deliverables: ['一人称動画'],
-    details: '駅から物件までの夜道を見てほしい。',
+    details: '駅から物件までの夜道を見てほしい。開催日時: 2026年10月12日 14:30',
   });
 
   assert.match(message, /場所: 渋谷駅 南口/);
-  assert.match(message, /希望日時（第1希望）: 2026\/10\/12 14:30/);
-  assert.match(message, /希望日時（第2希望）: 未定/);
   assert.match(message, /希望する記録: 一人称動画/);
+  assert.match(message, /詳細な内容:\n駅から物件までの夜道を見てほしい。開催日時: 2026年10月12日 14:30/);
+  assert.doesNotMatch(message, /希望日時|第1希望|第2希望/);
   assert.doesNotMatch(message, /写真|個別相談/);
   assert.doesNotMatch(message, /メールアドレス|電話番号/);
 });

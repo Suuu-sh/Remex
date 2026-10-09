@@ -21,7 +21,7 @@ export default function Consultation() {
             <div className="line-card-head">
               <span className="mono">ONLY INTAKE / LINE OFFICIAL</span>
               <h3>まずは、LINEで事前相談。</h3>
-              <p>場所や希望日時、現地で確認してほしいことをフォームに入力。内容を確認してから、LINEのトークで送信できます。</p>
+              <p>場所と詳細な内容をフォームに入力。開催日時が決まっている場合は詳細な内容に記入してください。運営者の予定などにより、その日時に対応できない場合があります。内容を確認してから、LINEのトークで送信できます。</p>
             </div>
             <ol className="line-steps">
               <li><b>1</b>事前相談フォームに入力</li>

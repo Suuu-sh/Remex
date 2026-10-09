@@ -4,7 +4,7 @@ import {buildPreApplicationMessage, createOfficialAccountDraftUrl, type PreAppli
 const LINE_BASIC_ID = '@034laqhf';
 
 const initialDraft: PreApplicationDraft = {
-  place: '', purpose: '', preferredDate1: '', preferredDate2: '', plan: '', deliverables: [], details: '',
+  place: '', purpose: '', plan: '', deliverables: [], details: '',
 };
 
 export default function PreApplicationPage() {
@@ -86,18 +86,6 @@ export default function PreApplicationPage() {
               </select>
             </label>
 
-            <fieldset className="apply-fieldset">
-              <legend>希望日時 <small>任意・決まっている場合</small></legend>
-              <label className="apply-field" htmlFor="apply-date-one">
-                <span>第1希望</span>
-                <input id="apply-date-one" name="preferredDate1" type="datetime-local" value={draft.preferredDate1} onChange={event => update('preferredDate1', event.target.value)}/>
-              </label>
-              <label className="apply-field" htmlFor="apply-date-two">
-                <span>第2希望</span>
-                <input id="apply-date-two" name="preferredDate2" type="datetime-local" value={draft.preferredDate2} onChange={event => update('preferredDate2', event.target.value)}/>
-              </label>
-            </fieldset>
-
             <label className="apply-field" htmlFor="apply-plan">
               <span>希望プラン <small>任意</small></span>
               <select id="apply-plan" name="plan" value={draft.plan} onChange={event => update('plan', event.target.value)}>
@@ -123,8 +111,9 @@ export default function PreApplicationPage() {
             </fieldset>
 
             <label className="apply-field" htmlFor="apply-details">
-              <span>現地で確認してほしいこと <b>必須</b></span>
-              <textarea id="apply-details" name="details" required rows={5} maxLength={600} placeholder="見たい場所、気になる点、撮影してほしい範囲など" value={draft.details} onChange={event => update('details', event.target.value)}/>
+              <span>詳細な内容 <b>必須</b></span>
+              <textarea id="apply-details" name="details" required rows={5} maxLength={600} placeholder="見たい場所、気になる点、撮影してほしい範囲など。日時が決まっている場合はその日時も記入してください" value={draft.details} onChange={event => update('details', event.target.value)}/>
+              <small>開催日時が固定されたイベントなどは、その日時を記入してください。運営者の予定などにより、その日時に対応できない場合があります。</small>
               <small className="apply-counter">{draft.details.length} / 600</small>
             </label>
 
