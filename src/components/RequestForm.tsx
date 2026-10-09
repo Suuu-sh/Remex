@@ -197,7 +197,7 @@ export default function RequestForm() {
                 <p className="privacy">お名前・メールアドレス・相談内容は、お問い合わせへの回答や訪問の調整に利用します。受信日から180日を経過した相談データは削除します。<a href="#privacy">個人情報の取り扱い</a>をご確認ください。</p>
                 <label className="consent">
                   <input name="consent" type="checkbox" required/>
-                  <span><a href="#privacy">個人情報の取り扱い</a>、<a href="#terms">利用・キャンセル条件</a>、<a href="#service">サービス内容</a>・<a href="#safety">禁止事項</a>を確認し、同意します。</span>
+                  <span><a href="#privacy">個人情報の取り扱い</a>、<a href="#terms">利用・キャンセル条件</a>、<a href="#tokusho">特定商取引法に基づく表記</a>、<a href="#service">サービス内容</a>・<a href="#safety">禁止事項</a>を確認し、同意します。</span>
                 </label>
                 <button className="button submit" disabled={status === 'sending'}>
                   {status === 'sending' ? <><span className="spinner" aria-hidden="true"/>送信しています…</> : <>この内容で相談する <Arrow/></>}

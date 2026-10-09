@@ -25,6 +25,7 @@ export function Footer() {
             <a href="#faq">よくある質問</a>
             <a href="#privacy">個人情報の取り扱い</a>
             <a href="#terms">利用・キャンセル条件</a>
+            <a href="#tokusho">特定商取引法に基づく表記</a>
           </nav>
           <small>© {new Date().getFullYear()} Remex <span>／</span> 東京23区・運営者対応</small>
         </div>
