@@ -98,25 +98,25 @@ export default function PreApplicationPage() {
           </div>
 
           {showReview ? (
-            <section className="apply-review" aria-labelledby="review-title">
+            <section className="apply-question apply-review" aria-labelledby="review-title">
               <p className="apply-question-label">送信内容<span className="is-required">必須</span></p>
               <h2 id="review-title">送信前に内容を確認してください。</h2>
-              <p>LINE公式アカウントとのトークが開き、申請文が入力欄に入ります。内容を確認・編集して、LINEの送信ボタンを押してください。</p>
-              <pre className="apply-message-preview">{buildPreApplicationMessage(draft)}</pre>
-              <label className="apply-consent">
-                <input type="checkbox" checked={consented} onChange={event => setConsented(event.target.checked)}/>
-                <span><a href="/#privacy" target="_blank" rel="noreferrer">個人情報の取り扱い</a>と<a href="/#terms" target="_blank" rel="noreferrer">利用・キャンセル条件</a>を確認し、入力内容をLINEへ渡してトークの入力欄にセットすることに同意します。</span>
-              </label>
-              {!consented && <p className="apply-status" role="note">LINEへ進むには、上記への同意が必要です。</p>}
-              <div className="apply-review-actions">
-                {consented ? (
-                  <a className="button line apply-submit" href={lineUrl}>LINEトークで内容を確認する <span aria-hidden="true">↗</span></a>
-                ) : (
-                  <button className="button line apply-submit" type="button" disabled>同意してLINEへ進む</button>
-                )}
-                <button className="apply-edit" type="button" onClick={back}>回答を編集する</button>
+              <div className="apply-field">
+                <pre className="apply-message-preview" tabIndex={0} aria-label="LINEに入力される申請文">{buildPreApplicationMessage(draft)}</pre>
+                <label className="apply-consent">
+                  <input type="checkbox" checked={consented} onChange={event => setConsented(event.target.checked)}/>
+                  <span><a href="/#privacy" target="_blank" rel="noreferrer">個人情報の取り扱い</a>と<a href="/#terms" target="_blank" rel="noreferrer">利用・キャンセル条件</a>を確認し、入力内容をLINEへ渡してトークの入力欄にセットすることに同意します。</span>
+                </label>
               </div>
-              <p className="apply-footnote">入力内容はRemexのサーバーやD1には保存されません。LINEトークで送信する前に、内容を確認・編集できます。</p>
+              <div className="apply-question-actions">
+                <button className="apply-back" type="button" onClick={back}><span aria-hidden="true">←</span> 編集する</button>
+                {consented ? (
+                  <a className="button line apply-next" href={lineUrl}>LINEで送信へ <span aria-hidden="true">↗</span></a>
+                ) : (
+                  <button className="button line apply-next" type="button" disabled aria-describedby="apply-consent-note">LINEで送信へ <span aria-hidden="true">↗</span></button>
+                )}
+              </div>
+              <p id="apply-consent-note" className="apply-footnote">{consented ? 'LINEのトークが開き、申請文が入力欄に入ります。' : 'LINEへ進むには、上記への同意が必要です。'}LINEで送信するまでは、相談内容はRemexへ届かず、サーバーにも保存されません。</p>
             </section>
           ) : (
             <form

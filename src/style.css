@@ -940,33 +940,15 @@ img, svg { display: block; }
 .apply-back:hover:not(:disabled) { color: var(--ink); }
 .apply-back:disabled { cursor: default; opacity: .35; }
 .apply-footnote { margin: -8px 0 0; color: var(--muted); font-size: 10px; line-height: 1.65; }
-.apply-review { display: grid; gap: 12px; min-width: 0; }
-.apply-review .apply-question-label { margin-bottom: -8px; }
-.apply-review > p { margin: -6px 0 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
-.apply-message-preview { max-height: 160px; overflow: auto; overflow-wrap: anywhere; white-space: pre-wrap; margin: 0; padding: 11px 13px; border: 1px solid var(--line-strong); border-radius: 12px; background: #fff; color: var(--ink); font: 500 12px/1.6 var(--font-body); }
-.apply-review-actions { display: grid; gap: 8px; }
-.apply-edit { justify-self: center; padding: 8px 12px; border: 0; background: transparent; color: var(--muted); font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
+.apply-review .apply-field { gap: 12px; font-weight: 400; }
+.apply-message-preview { height: 120px; overflow: auto; overflow-wrap: anywhere; white-space: pre-wrap; margin: 0; padding: 11px 13px; border: 1px solid var(--line-strong); border-radius: 12px; background: #fff; color: var(--ink); font: 500 14px/1.6 var(--font-body); }
+.apply-next:disabled { cursor: not-allowed; opacity: .5; transform: none; box-shadow: none; }
 .apply-footer { grid-column: 1 / -1; display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 24px; padding: 12px 0 28px; color: var(--muted); font-size: 11px; }
 .apply-footer a { text-decoration: underline; text-underline-offset: 3px; }
 
 @media (min-width: 961px) {
   .apply-main h1 { font-size: clamp(30px, 3.3vw, 40px); }
 
-  /* Keep the final review actionable without requiring desktop scrolling. */
-  .apply-page.is-review { padding-bottom: 2px; }
-  .apply-page.is-review .apply-main { column-gap: clamp(24px, 3vw, 40px); row-gap: 4px; }
-  .apply-page.is-review .apply-form { min-height: 31.4rem; gap: 10px; padding: 20px; }
-  .apply-page.is-review .apply-review { gap: 8px; }
-  .apply-page.is-review .apply-review h2 { font-size: clamp(24px, 3vw, 34px); line-height: 1.35; }
-  .apply-page.is-review .apply-review > p { font-size: 11px; line-height: 1.5; }
-  .apply-page.is-review .apply-message-preview { max-height: 112px; padding: 11px 13px; font-size: 12px; line-height: 1.5; }
-  .apply-page.is-review .apply-consent { gap: 8px; font-size: 10px; line-height: 1.5; }
-  .apply-page.is-review .apply-status { margin-top: -4px; font-size: 10px; line-height: 1.5; }
-  .apply-page.is-review .apply-review-actions { gap: 4px; }
-  .apply-page.is-review .apply-submit { min-height: 44px; padding: 11px 18px; font-size: 13px; }
-  .apply-page.is-review .apply-edit { min-height: 32px; padding: 4px 10px; }
-  .apply-page.is-review .apply-footnote { font-size: 9px; line-height: 1.45; }
-  .apply-page.is-review .apply-footer { padding-top: 0; padding-bottom: 0; }
 }
 
 @media (max-width: 960px) {
@@ -988,8 +970,6 @@ img, svg { display: block; }
   .apply-field textarea { min-height: 112px; }
   .apply-question-actions { align-items: stretch; }
   .apply-next { min-width: 0; flex: 1; }
-  .apply-review { gap: 10px; }
-  .apply-message-preview { padding: 11px; font-size: 11px; }
-  .apply-review > p { font-size: 11px; line-height: 1.55; }
+  .apply-message-preview { padding: 11px 13px; font-size: 13px; }
   .apply-footer { gap: 12px 18px; }
 }
