@@ -58,7 +58,7 @@ export function Faq() {
       <div>
         <p className="eyebrow" data-reveal><span className="dot"/> QUESTIONS &amp; ANSWERS</p>
         <h2 data-reveal>気になること。</h2>
-        <p className="faq-side" data-reveal>ここにないことも、フォームから気軽にお問い合わせください。</p>
+        <p className="faq-side" data-reveal>ここにないことも、LINEから気軽にご相談ください。LINEを使っていない方はフォームをご利用いただけます。</p>
       </div>
       <div className="faq-list">
         {faqs.map((f, i) => {

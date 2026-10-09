@@ -11,7 +11,7 @@ export function Process() {
         <div className="process-head">
           <p className="eyebrow" data-reveal><span className="dot"/> HOW IT WORKS</p>
           <h2 data-reveal>相談から、<br/>お届けまで。</h2>
-          <p data-reveal>フォームの送信だけでは、予約もお支払いも発生しません。内容と費用に合意してから、訪問が決まります。</p>
+          <p data-reveal>LINEやフォームでの相談だけでは、予約もお支払いも発生しません。内容と費用に合意してから、訪問が決まります。</p>
         </div>
         <ol className="timeline" ref={ref} style={vars({'--p': progress})}>
           <span className="timeline-track" aria-hidden="true"><span/></span>
