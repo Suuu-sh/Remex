@@ -32,7 +32,7 @@ export const heroPlaces = [
 ];
 
 /** LINE公式アカウントの友だち追加URL（例: https://lin.ee/xxxx）。空のあいだはLINEボタンがフォームへ案内します。 */
-export const LINE_URL = 'https://lin.ee/ZvrRtXZ';
+export const LINE_URL: string = 'https://lin.ee/ZvrRtXZ';
 
 export const steps = [
   {n: '01', title: 'LINEで、教えてください。', text: '友だち追加すると、相談のテンプレートが届きます。場所や気になること、希望日時を送ってください。まだ具体的でなくても大丈夫です。', tag: 'LINE'},
