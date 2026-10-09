@@ -13,27 +13,41 @@ export interface Env {
 type StoredRequest = {mode: 'request' | 'inquiry'; name: string; place: string; preferred: string};
 
 /** Converts LINE errors into an allowlisted reason without logging response details. */
-async function getLineFailureReason(response: Response): Promise<string> {
+async function getLineFailureReason(response: Response, token: string, messages: {type: 'text'; text: string}[]): Promise<string> {
   if (response.status === 401) return 'token_unauthorized';
   if (response.status === 403) return 'channel_forbidden';
   if (response.status !== 400) return 'line_api_error';
 
+  let errorText = '';
+  let detailItems: {message?: unknown; property?: unknown}[] = [];
   try {
     const body = await response.json() as {message?: unknown; details?: unknown};
     const details = Array.isArray(body.details) ? body.details : [];
-    const detailItems = details.filter((detail): detail is {message?: unknown; property?: unknown} => Boolean(detail) && typeof detail === 'object') as {message?: unknown; property?: unknown}[];
-    const errorText = [body.message, ...details.flatMap((detail) => {
+    detailItems = details.filter((detail): detail is {message?: unknown; property?: unknown} => Boolean(detail) && typeof detail === 'object') as {message?: unknown; property?: unknown}[];
+    errorText = [body.message, ...details.flatMap((detail) => {
       if (!detail || typeof detail !== 'object') return [];
       const item = detail as {message?: unknown; property?: unknown};
       return [item.message, item.property];
     })].filter((value): value is string => typeof value === 'string').join(' ').toLowerCase();
-    if (errorText.includes('user id') && /(doesn't exist|does not exist|invalid)/.test(errorText)) return 'recipient_invalid';
-    if (errorText.includes('invalid') && detailItems.some((item) => item.property === 'to')) return 'recipient_invalid';
-    if (errorText.includes('invalid message') || errorText.includes('message object')) return 'invalid_message';
-    return 'line_api_error';
-  } catch {
-    return 'line_api_error';
-  }
+  } catch { /* Use the message-validation endpoint below for a safe classification. */ }
+  if (errorText.includes('user id') && /(doesn't exist|does not exist|invalid|not found|isn't in|is not in)/.test(errorText)) return 'recipient_invalid';
+  if (errorText.includes('invalid') && detailItems.some((item) => item.property === 'to')) return 'recipient_invalid';
+  if (errorText.includes('invalid message') || errorText.includes('message object')) return 'invalid_message';
+
+  // LINE's validation endpoint checks message objects independently from the recipient.
+  // If the payload validates, the original 400 is attributable to the destination user ID.
+  try {
+    const validation = await fetch('https://api.line.me/v2/bot/message/validate/push', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', Authorization: `Bearer ${token}`},
+      body: JSON.stringify({messages}),
+    });
+    if (validation.ok) return 'recipient_invalid';
+    if (validation.status === 400) return 'invalid_message';
+    if (validation.status === 401) return 'token_unauthorized';
+    if (validation.status === 403) return 'channel_forbidden';
+  } catch { /* Keep the failure log generic if LINE validation is unavailable. */ }
+  return 'line_api_error';
 }
 
 /** Pushes a short new-request notice to the operator's LINE. Never throws. */
@@ -52,18 +66,19 @@ async function notifyLine(env: Env, input: StoredRequest, id: string): Promise<v
     ...(input.mode === 'request' ? [`場所: ${input.place}`, `希望日時: ${input.preferred}`] : []),
     `ID: ${id}`,
   ];
+  const messages = [{type: 'text' as const, text: lines.join('\n').slice(0, 1000)}];
   try {
     const response = await fetch('https://api.line.me/v2/bot/message/push', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Authorization: `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}`},
-      body: JSON.stringify({to: env.LINE_ADMIN_USER_ID, messages: [{type: 'text', text: lines.join('\n').slice(0, 1000)}]}),
+      body: JSON.stringify({to: env.LINE_ADMIN_USER_ID, messages}),
     });
     if (!response.ok) {
       console.warn(JSON.stringify({
         event: 'line_notification_failed',
         requestId: id,
         status: response.status,
-        reason: await getLineFailureReason(response),
+        reason: await getLineFailureReason(response, env.LINE_CHANNEL_ACCESS_TOKEN, messages),
       }));
       return;
     }
