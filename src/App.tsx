@@ -8,7 +8,7 @@ import {Area, Pricing, Process} from './components/Plan';
 import {Chapter, Faq, Safety} from './components/Trust';
 import PublicPolicies from './components/PublicPolicies';
 import SampleRecord from './components/SampleRecord';
-import RequestForm from './components/RequestForm';
+import Consultation from './components/Consultation';
 import {Footer, MobileCta} from './components/Footer';
 import PricingPage from './components/PricingPage';
 
@@ -28,7 +28,7 @@ export default function App() {
 
   return (
     <>
-      <a className="skip-link" href="#request">相談フォームへ移動</a>
+      <a className="skip-link" href="#request">LINEでの相談窓口へ移動</a>
       <Header/>
       <main>
         <Hero/>
@@ -45,7 +45,7 @@ export default function App() {
         <Chapter/>
         <Faq/>
         <PublicPolicies/>
-        <RequestForm/>
+        <Consultation/>
       </main>
       <Footer/>
       <MobileCta/>

@@ -1,7 +1,7 @@
 import {heroPlaces} from '../content';
 import {useCycle, vars} from '../hooks';
 import Viewfinder from './Viewfinder';
-import LineButton, {hasLine} from './LineButton';
+import LineButton from './LineButton';
 
 const titleLines = ['あなたの代わりに、', '行ってきます'];
 
@@ -49,7 +49,6 @@ export default function Hero() {
             <LineButton/>
             <a className="button ghost" href="#service">できることを見る</a>
           </div>
-          {hasLine && <p className="micro intro hero-alt" style={vars({'--d': '1000ms'})}>LINEを使っていない方は <a href="#request">フォームから相談</a></p>}
           <dl className="hero-facts intro" style={vars({'--d': '1050ms'})}>
             <div><dt>対応エリア</dt><dd>東京<b>23</b>区</dd></div>
             <div><dt>訪問時間</dt><dd><b>30</b>分〜</dd></div>

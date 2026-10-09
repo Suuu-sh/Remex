@@ -11,7 +11,7 @@ export function Process() {
         <div className="process-head">
           <p className="eyebrow" data-reveal><span className="dot"/> HOW IT WORKS</p>
           <h2 data-reveal>相談から、<br/>お届けまで。</h2>
-          <p data-reveal>LINEやフォームの相談だけでは予約は確定しません。見積もりは7日間有効で、支払期限を記載します。銀行振込の前払いは原則、訪問前日までです。前日・当日の予約は訪問開始前に着金確認が必要で、いずれも入金確認後に予約が確定します。</p>
+          <p data-reveal>LINEでの相談だけでは予約は確定しません。見積もりは7日間有効で、支払期限を記載します。銀行振込の前払いは原則、訪問前日までです。前日・当日の予約は訪問開始前に着金確認が必要で、いずれも入金確認後に予約が確定します。</p>
         </div>
         <ol className="timeline" ref={ref} style={vars({'--p': progress})}>
           <span className="timeline-track" aria-hidden="true"><span/></span>

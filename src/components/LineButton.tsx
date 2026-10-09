@@ -1,8 +1,6 @@
 import {LINE_URL} from '../content';
 import {Arrow} from './Icons';
 
-export const hasLine = LINE_URL !== '';
-
 function LineMark({size = 18}: {size?: number}) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
@@ -12,11 +10,8 @@ function LineMark({size = 18}: {size?: number}) {
   );
 }
 
-/** Primary consultation CTA. Falls back to the form while LINE_URL is not configured. */
+/** Primary consultation CTA. */
 export default function LineButton({label = 'LINEで相談する', small = false, className = ''}: {label?: string; small?: boolean; className?: string}) {
-  if (!hasLine) {
-    return <a className={`button${small ? ' small' : ''} ${className}`} href="#request">{small ? '相談してみる' : 'まずは無料で相談する'} <Arrow/></a>;
-  }
   return (
     <a className={`button line${small ? ' small' : ''} ${className}`} href={LINE_URL} target="_blank" rel="noopener noreferrer">
       <LineMark size={small ? 16 : 20}/>{label}<Arrow/>
