@@ -7,6 +7,7 @@ import UseCases from './components/UseCases';
 import {Area, Pricing, Process} from './components/Plan';
 import {Chapter, Faq, Safety} from './components/Trust';
 import PublicPolicies from './components/PublicPolicies';
+import SampleRecord from './components/SampleRecord';
 import RequestForm from './components/RequestForm';
 import {Footer, MobileCta} from './components/Footer';
 
@@ -23,6 +24,7 @@ export default function App() {
         <Services/>
         <UseCases/>
         <Delivery/>
+        <SampleRecord/>
         <Process/>
         <Area/>
         <Pricing/>
