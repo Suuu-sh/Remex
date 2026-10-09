@@ -110,14 +110,17 @@ test('Worker pushes a LINE notice only when LINE secrets are configured', async 
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
     assert.match(warnings[1], /"reason":"network_error"/);
 
-    globalThis.fetch = (async () => new Response(JSON.stringify({
-      message: 'The request body has 1 error(s)',
-      details: [{message: 'The property, to, in the request body is invalid', property: 'to'}],
-    }), {status: 400})) as typeof fetch;
+    globalThis.fetch = (async (url: string | URL | Request, init?: RequestInit) => {
+      calls.push({url: String(url), init: init ?? {}});
+      return String(url).endsWith('/validate/push')
+        ? new Response('{}')
+        : new Response(JSON.stringify({message: "Couldn't send the message"}), {status: 400});
+    }) as typeof fetch;
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
     assert.match(warnings[2], /"status":400/);
     assert.match(warnings[2], /"reason":"recipient_invalid"/);
-    assert.doesNotMatch(warnings[2], /doesn't exist/);
+    assert.equal(calls[1].url, 'https://api.line.me/v2/bot/message/push');
+    assert.equal(calls[2].url, 'https://api.line.me/v2/bot/message/validate/push');
   } finally {
     globalThis.fetch = realFetch;
     console.warn = realWarn;
