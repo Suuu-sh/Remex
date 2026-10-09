@@ -5,9 +5,9 @@
 ## 技術構成
 
 - React / TypeScript / Vite のモバイルファーストLP
-- 開発用: Express API。受付データは `data/requests.json` にローカル保存
-- 公開用: Cloudflare Workers Static Assets + D1。`/api/requests` をWorkerで処理し、受付データをD1へ保存
-- Zod入力検証、20KB上限、同一オリジン確認、honeypot、Cloudflare Rate Limiting
+- 開発用: Expressで生成済みLPとhealth APIを配信
+- 公開用: Cloudflare Workers Static Assets + D1。D1は過去の相談記録の保管と180日後の削除に利用
+- 新しいご相談はLINE公式アカウントのみで受付。旧フォームAPIへのPOSTはHTTP 410を返し、LINE公式アカウントへ案内
 - Cloudflare本番デプロイ用Wrangler設定と、GitHub Actionsの手動デプロイworkflow
 
 ## ローカル開発（Express）
@@ -27,7 +27,7 @@ npm run build
 npm start
 ```
 
-`npm start` は生成済みLPとExpress APIを http://127.0.0.1:3001 で提供します。受付データは `data/requests.json` へ保存されます。このファイルはGit対象外です。
+`npm start` は生成済みLPとExpressのhealth APIを http://127.0.0.1:3001 で提供します。`POST /api/requests` は新しいデータを保存せず、HTTP 410とLINE公式アカウントへの案内を返します。
 
 ## Cloudflare Workersでローカル確認
 
@@ -63,7 +63,7 @@ workflowはテスト、ビルド、リモートD1マイグレーション、Work
 
 ## 受付データの確認
 
-受付内容はCloudflare D1の `requests` テーブルに保存されます。相談データは受信から180日後に、Workerのスケジュール処理（毎日18:00 UTC）で削除されます。管理画面はありません。LINE通知のsecretを設定するまでは、D1を確認してください。Cloudflareアカウントのアクセスを適切に保護してください。
+過去にフォームで受け付けた記録はCloudflare D1の `requests` テーブルに残っています。この変更で既存のD1レコードやテーブルは削除しません。Workerのスケジュール処理（毎日18:00 UTC）が、各記録の受信から180日後に削除します。新しいLINE相談は本サイトのD1へ保存されません。管理画面はありません。Cloudflareアカウントのアクセスを適切に保護してください。
 
 ```sh
 npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at, mode FROM requests ORDER BY created_at DESC LIMIT 20"
@@ -71,20 +71,9 @@ npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at
 
 ## LINEでの相談受付
 
-相談の主な窓口はLINE公式アカウント（`https://lin.ee/ZvrRtXZ`）です。フォームはLINEを使っていない方向けに残しています。
+新しいご相談はLINE公式アカウント（[Remex公式LINE](https://lin.ee/ZvrRtXZ)）のみで受け付けます。LINE公式アカウントのトークでお問い合わせへの返信・受付確認を行ってください。ウェブフォームは終了しており、旧フォームAPIも新規送信を受け付けません。
 
-1. LINE公式アカウントのあいさつメッセージに、相談テンプレート（場所・希望日時・してほしいこと・写真/動画の希望）を設定します。
-2. フォームからの相談を運営者のLINEへ通知するには、その公式アカウントでMessaging APIを有効にし、チャネルアクセストークンを発行します。
-3. LINE Developersのチャネル基本設定にある「あなたのユーザーID」を確認します。これは通常のLINE IDとは異なります。LINEアカウントをBusiness IDに連携し、Remex公式アカウントを友だち追加しておきます。
-4. 次のコマンドを実行し、Cloudflareの入力プロンプトへ値を直接入力します。アクセストークンをチャット・ソースコード・GitHubへ貼らないでください。
-
-```sh
-npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN --name remex-site
-npx wrangler secret put LINE_ADMIN_USER_ID --name remex-site
-```
-
-`LINE_ADMIN_USER_ID` は通知を受け取る運営者のユーザーID（`U` から始まる文字列）です。両secretのどちらかが未設定の場合、通知は送られず、受付内容はD1に保存されます。LINE APIがエラーを返した場合は、個人情報を含めずWorkerログに失敗理由を記録します。
-値はWranglerのプロンプトへ直接入力し、チャット・ソースコード・GitHubへ貼らないでください。`secret put` は実行のたびにWorkerをデプロイします。設定後は `npx wrangler secret list --name remex-site` で名前だけが表示されることを確認し、フォーム送信で通知をテストしてください。
+公式アカウントのあいさつメッセージに、相談テンプレート（場所・希望日時・してほしいこと・写真/動画の希望）を設定しておくと、相談のやりとりがスムーズです。旧フォーム通知用のLINE Messaging API処理は停止しており、関連するCloudflare secretsが設定済みでも現在は読み取り・使用しません。secretの変更・削除はこの変更では行っていません。
 
 ### 事業者情報の開示依頼が届いたら
 
@@ -111,12 +100,12 @@ Cloudflare Web Analyticsを `remex-site.suuu-sh.workers.dev` に設定し、本�
 
 ## 運用開始前に残っているタスク
 
-- LINE DevelopersのMessaging API有効化、相談テンプレート、Cloudflare secretsの設定は完了。フォーム送信から運営者のLINE通知まで実際にテスト済み
+- LINE公式アカウントのトークで新しい相談を受け付け、返信する運用を継続
 - 特定商取引法に基づく表記を追加済み。住所等の請求時開示が実際の申込・契約フローに適合するかを確認し、開示請求に遅滞なく回答できるよう正式情報を安全に管理（必要に応じ専門家へ確認）
 - 公開可能な自主制作の記録サンプルを撮影・掲載（現時点ではサンプル未公開）
 - 基本料金は30分 ¥6,600／60分 ¥9,900／90分 ¥13,200。訪問先と作業範囲を確認し、実際の往復公共交通機関運賃と、必要な場合の入場料・施設利用料を見積もりで事前提示して了承を得る
 
-このリポジトリにはユーザー登録、マッチング、決済、管理画面はありません。相談の主な窓口はLINE公式アカウントで、フォームはLINEを使っていない方向けの代替窓口です。見積もりは発行日から7日間有効で、支払期限を記載します。銀行振込による前払い（振込手数料は依頼者負担）の期限は原則訪問前日までです。訪問前日または当日の予約は、訪問開始前に着金確認が必要です。入金確認後に予約が確定します。
+このリポジトリにはユーザー登録、マッチング、決済、管理画面はありません。新しい相談の窓口はLINE公式アカウントのみです。見積もりは発行日から7日間有効で、支払期限を記載します。銀行振込による前払い（振込手数料は依頼者負担）の期限は原則訪問前日までです。訪問前日または当日の予約は、訪問開始前に着金確認が必要です。入金確認後に予約が確定します。
 
 ## データ保護
 

@@ -12,8 +12,8 @@ export function Footer() {
     <footer className="footer" data-dark>
       <div className="footer-inner">
         <a className="footer-cta" href={siteHref('#request')}>
-          <span className="mono">START A REQUEST</span>
-          <strong>あなたの代わりに、<br/>行ってきます。</strong>
+          <span className="mono">START WITH LINE</span>
+          <strong>まずはLINEで、<br/>相談から。</strong>
           <span className="footer-cta-arrow"><Arrow size={28}/></span>
         </a>
         <div className="footer-row">
@@ -38,18 +38,18 @@ export function Footer() {
   );
 }
 
-/** Mobile-only floating CTA: shown after the hero, hidden while the form is on screen. */
+/** Mobile-only floating CTA: shown after the hero, hidden while the consultation section is on screen. */
 export function MobileCta() {
   const {y} = usePageScroll();
-  const [formInView, setFormInView] = useState(false);
+  const [consultationInView, setConsultationInView] = useState(false);
   useEffect(() => {
-    const form = document.getElementById('request');
-    if (!form || !('IntersectionObserver' in window)) return;
-    const observer = new IntersectionObserver(([entry]) => setFormInView(entry.isIntersecting));
-    observer.observe(form);
+    const consultation = document.getElementById('request');
+    if (!consultation || !('IntersectionObserver' in window)) return;
+    const observer = new IntersectionObserver(([entry]) => setConsultationInView(entry.isIntersecting));
+    observer.observe(consultation);
     return () => observer.disconnect();
   }, []);
-  const visible = y > 640 && !formInView;
+  const visible = y > 640 && !consultationInView;
   return (
     <div className={`mobile-cta${visible ? ' is-visible' : ''}`} aria-hidden={!visible} inert={!visible}>
       <span><i className="live-dot"/>相談は無料です</span>
