@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {usePageScroll} from '../hooks';
 import {Brand} from './Header';
 import {Arrow} from './Icons';
+import LineButton from './LineButton';
 
 export function Footer() {
   return (
@@ -47,7 +48,7 @@ export function MobileCta() {
   return (
     <div className={`mobile-cta${visible ? ' is-visible' : ''}`} aria-hidden={!visible} inert={!visible}>
       <span><i className="live-dot"/>相談は無料です</span>
-      <a className="button small" href="#request">相談してみる <Arrow/></a>
+      <LineButton small label="LINEで相談"/>
     </div>
   );
 }

@@ -4,7 +4,7 @@ export default function PublicPolicies() {
       <div className="policy-intro" data-reveal>
         <p className="eyebrow"><span className="dot"/> PRIVACY &amp; TERMS</p>
         <h2 id="policies-title">ご相談の前に。</h2>
-        <p>フォームは無料の相談・見積もり依頼です。個人情報の取り扱いと、ご依頼が確定するまでの流れをご確認ください。</p>
+        <p>LINE・フォームでのご相談は無料の相談・見積もり依頼です。個人情報の取り扱いと、ご依頼が確定するまでの流れをご確認ください。</p>
       </div>
       <div className="policy-grid">
         <article className="policy-card" id="privacy" aria-labelledby="privacy-title" data-reveal>
@@ -12,6 +12,8 @@ export default function PublicPolicies() {
           <h3 id="privacy-title">個人情報の取り扱い</h3>
           <h4>受け取る情報と利用目的</h4>
           <p>お名前、メールアドレス、ご相談の種類、相談内容（希望場所・日時・してほしいこと・確認ポイント・希望のお届け方法・自由記入内容など）を受け取り、お問い合わせへの回答、対応可否や見積もりの検討、訪問の調整・提供、提供後のご連絡に利用します。</p>
+          <h4>LINEでのご相談</h4>
+          <p>LINE公式アカウントでご相談いただいた場合、トークの内容、送信された画像・動画、LINEの表示名などを、上記と同じ目的で利用します。トークの内容はLINEヤフー株式会社が提供するサービス上に保存され、同社のプライバシーポリシーに従って取り扱われます。撮影した写真・動画もLINE（または共有リンク）でお届けします。</p>
           <h4>保存と迷惑送信対策</h4>
           <p>本サイトの配信とフォーム処理にはCloudflareを利用し、フォームの入力内容はCloudflare D1に保存します。迷惑送信対策のCloudflareレート制限では、送信元IPアドレスを判定に利用します。IPアドレスは、本サービスのD1申込データには保存しません。</p>
           <h4>利用・保管期間</h4>

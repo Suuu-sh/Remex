@@ -31,10 +31,13 @@ export const heroPlaces = [
   '閉店する店の最後の営業日',
 ];
 
+/** LINE公式アカウントの友だち追加URL（例: https://lin.ee/xxxx）。空のあいだはLINEボタンがフォームへ案内します。 */
+export const LINE_URL: string = 'https://lin.ee/ZvrRtXZ';
+
 export const steps = [
-  {n: '01', title: 'まずは、教えてください。', text: '場所や気になること、希望日時をフォームから。まだ具体的でなくても大丈夫です。', tag: 'FORM'},
-  {n: '02', title: '内容と料金を、確認。', text: '訪問の可否、方法、費用を個別にご案内。合意してから訪問を決めます。', tag: 'ESTIMATE'},
-  {n: '03', title: 'あなたの代わりに、現地へ。', text: '確認したいポイントに沿って訪問。GoProの一人称動画と写真でお届けします。撮影できない場所がある場合は、事前に相談して内容を調整します。', tag: 'VISIT'},
+  {n: '01', title: 'LINEで、教えてください。', text: '友だち追加すると、相談のテンプレートが届きます。場所や気になること、希望日時を送ってください。まだ具体的でなくても大丈夫です。', tag: 'LINE'},
+  {n: '02', title: '内容と料金を、確認。', text: '訪問の可否、方法、費用をLINEで個別にご案内。合意してから訪問を決めます。', tag: 'ESTIMATE'},
+  {n: '03', title: 'あなたの代わりに、現地へ。', text: '確認したいポイントに沿って訪問。撮影した動画と写真は、LINEでお届けします。撮影できない場所がある場合は、事前に相談して内容を調整します。', tag: 'VISIT'},
 ];
 
 export type Delivery = {id: 'photo' | 'video' | 'edit'; label: string; en: string; text: string; soon?: boolean};

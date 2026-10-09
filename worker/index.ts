@@ -4,6 +4,32 @@ export interface Env {
   ASSETS: Fetcher;
   DB: D1Database;
   REQUEST_LIMITER: RateLimit;
+  /** Messaging API channel access token (secret). Notification is skipped when unset. */
+  LINE_CHANNEL_ACCESS_TOKEN?: string;
+  /** Operator's LINE user ID that receives new-request notifications (secret). */
+  LINE_ADMIN_USER_ID?: string;
+}
+
+type StoredRequest = {mode: 'request' | 'inquiry'; name: string; place: string; preferred: string};
+
+/** Pushes a short new-request notice to the operator's LINE. Never throws. */
+async function notifyLine(env: Env, input: StoredRequest, id: string): Promise<void> {
+  if (!env.LINE_CHANNEL_ACCESS_TOKEN || !env.LINE_ADMIN_USER_ID) return;
+  const lines = [
+    input.mode === 'request' ? '【Remex】フォームから訪問の相談が届きました' : '【Remex】フォームからお問い合わせが届きました',
+    `お名前: ${input.name}`,
+    ...(input.mode === 'request' ? [`場所: ${input.place}`, `希望日時: ${input.preferred}`] : []),
+    `ID: ${id}`,
+  ];
+  try {
+    await fetch('https://api.line.me/v2/bot/message/push', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', Authorization: `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}`},
+      body: JSON.stringify({to: env.LINE_ADMIN_USER_ID, messages: [{type: 'text', text: lines.join('\n').slice(0, 1000)}]}),
+    });
+  } catch {
+    // The request is already stored; a failed notice must not fail the submission.
+  }
 }
 
 const MAX_BODY_BYTES = 20_000;
@@ -43,7 +69,7 @@ async function readLimitedBody(request: Request): Promise<string | null> {
   return new TextDecoder().decode(body);
 }
 
-async function handleApi(request: Request, env: Env): Promise<Response> {
+async function handleApi(request: Request, env: Env, ctx?: ExecutionContext): Promise<Response> {
   const url = new URL(request.url);
 
   if (url.pathname === '/api/health' && request.method === 'GET') return json({ok: true});
@@ -114,12 +140,15 @@ async function handleApi(request: Request, env: Env): Promise<Response> {
     return json({message: '保存できませんでした。時間をおいて再度お試しください。'}, 500);
   }
 
+  const notice = notifyLine(env, input, id);
+  if (ctx) ctx.waitUntil(notice);
+  else await notice;
   return json({id, message: '受け付けました。'}, 201);
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
-    if (new URL(request.url).pathname.startsWith('/api/')) return handleApi(request, env);
+  async fetch(request: Request, env: Env, ctx?: ExecutionContext): Promise<Response> {
+    if (new URL(request.url).pathname.startsWith('/api/')) return handleApi(request, env, ctx);
     return env.ASSETS.fetch(request);
   },
   async scheduled(controller: ScheduledController, env: Env): Promise<void> {

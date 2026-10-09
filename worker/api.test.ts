@@ -78,3 +78,27 @@ test('scheduled cleanup deletes requests older than 180 days', async () => {
   assert.equal(deletes[0].sql, 'DELETE FROM requests WHERE created_at < ?');
   assert.equal(deletes[0].values[0], new Date(scheduledTime - 180 * 24 * 60 * 60 * 1000).toISOString());
 });
+
+test('Worker pushes a LINE notice only when LINE secrets are configured', async () => {
+  const calls: {url: string; init: RequestInit}[] = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = (async (url: string, init: RequestInit) => { calls.push({url, init}); return new Response('{}'); }) as typeof fetch;
+  try {
+    const {env} = createEnv();
+    assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
+    assert.equal(calls.length, 0);
+
+    Object.assign(env, {LINE_CHANNEL_ACCESS_TOKEN: 'token', LINE_ADMIN_USER_ID: 'U123'});
+    assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
+    assert.equal(calls.length, 1);
+    assert.equal(calls[0].url, 'https://api.line.me/v2/bot/message/push');
+    const body = JSON.parse(String(calls[0].init.body));
+    assert.equal(body.to, 'U123');
+    assert.match(body.messages[0].text, /東京駅周辺/);
+
+    globalThis.fetch = (async () => { throw new Error('network'); }) as typeof fetch;
+    assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});

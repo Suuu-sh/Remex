@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {usePageScroll} from '../hooks';
 import {Arrow} from './Icons';
+import LineButton from './LineButton';
 
 const links = [
   {href: '#service', label: 'できること'},
@@ -41,7 +42,7 @@ export default function Header() {
           <nav aria-label="メインメニュー">
             {links.map(l => <a key={l.href} href={l.href}>{l.label}</a>)}
           </nav>
-          <a className="button small" href="#request">相談してみる <Arrow/></a>
+          <LineButton small label="LINEで相談"/>
           <button
             className="menu-toggle"
             type="button"
@@ -63,7 +64,7 @@ export default function Header() {
             </a>
           ))}
         </nav>
-        <a className="button" href="#request" onClick={() => setOpen(false)}>まずは無料で相談する <Arrow/></a>
+        <LineButton/>
         <p className="micro">東京23区対応 ／ 個人・法人どちらも</p>
       </div>
     </>

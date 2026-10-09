@@ -1,6 +1,7 @@
 import {useCases, useCaseRules} from '../content';
 import {trackPointer, vars} from '../hooks';
 import {Check} from './Icons';
+import LineButton from './LineButton';
 
 const art = {
   moving: (
@@ -91,7 +92,7 @@ export default function UseCases() {
           <ul>
             {useCaseRules.map(rule => <li key={rule}><Check size={12}/>{rule}</li>)}
           </ul>
-          <a className="button" href="#request">使い方を相談する</a>
+          <LineButton label="LINEで使い方を相談"/>
         </div>
       </div>
     </section>

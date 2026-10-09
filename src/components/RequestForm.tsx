@@ -2,6 +2,7 @@ import {useRef, useState, type FormEvent} from 'react';
 import {formats} from '../content';
 import {vars} from '../hooks';
 import {Arrow, Check} from './Icons';
+import LineButton, {hasLine} from './LineButton';
 
 type Mode = 'request' | 'inquiry';
 type Status = 'idle' | 'sending' | 'success' | 'error';
@@ -96,7 +97,7 @@ export default function RequestForm() {
           <ul className="request-points" data-reveal>
             <li><Check/>相談・見積もりは無料</li>
             <li><Check/>送信だけでは予約・支払いは発生しません</li>
-            <li><Check/>内容を確認し、メールで個別にご連絡</li>
+            <li><Check/>{hasLine ? 'やりとりも動画のお届けも、LINEで完結' : '内容を確認し、メールで個別にご連絡'}</li>
           </ul>
           <div className="request-stamp" aria-hidden="true">
             <svg viewBox="0 0 200 200">
@@ -107,6 +108,25 @@ export default function RequestForm() {
           </div>
         </div>
 
+        <div className="request-side">
+        {hasLine && (
+          <div className="line-card" data-reveal>
+            <div className="line-card-head">
+              <span className="mono">RECOMMENDED</span>
+              <h3>LINEで、そのまま相談。</h3>
+              <p>友だち追加すると、相談のテンプレートが届きます。見積もりのご案内も、撮影した動画のお届けも、同じトークで行います。</p>
+            </div>
+            <ol className="line-steps">
+              <li><b>1</b>友だち追加</li>
+              <li><b>2</b>テンプレートに沿って送信</li>
+              <li><b>3</b>見積もり・日程をトークで確認</li>
+              <li><b>4</b>動画と写真をLINEでお届け</li>
+            </ol>
+            <LineButton/>
+            <p className="line-card-note">長い動画は画質を保つため、共有リンクでお送りする場合があります。</p>
+          </div>
+        )}
+        {hasLine && <p className="form-divider" data-reveal><span>LINEを使っていない方は、フォームから</span></p>}
         <div className="form-card" data-reveal>
           {status === 'success' ? (
             <div className="form-success" role="status">
@@ -192,6 +212,7 @@ export default function RequestForm() {
               </form>
             </>
           )}
+        </div>
         </div>
       </div>
     </section>
