@@ -34,8 +34,11 @@ export const heroPlaces = [
 /** LINE公式アカウントの友だち追加URL。 */
 export const LINE_URL: string = 'https://lin.ee/ZvrRtXZ';
 
+/** LINE内で事前相談フォームを開くLIFF URL。 */
+export const LINE_APPLICATION_URL: string = 'https://liff.line.me/2011950025-CXAIFaev';
+
 export const steps = [
-  {n: '01', title: 'LINEで、教えてください。', text: '友だち追加すると、相談のテンプレートが届きます。場所や気になること、希望日時を送ってください。まだ具体的でなくても大丈夫です。', tag: 'LINE'},
+  {n: '01', title: 'LINEで、希望を伝える。', text: '事前相談フォームに場所、希望日時、現地で確認してほしいことを入力します。内容を確認して送信すると、LINE公式アカウントとのトークに下書きされます。', tag: 'LINE'},
   {n: '02', title: '内容と料金を、確認。', text: '訪問の可否、範囲、費用をご案内します。見積もりは発行日から7日間有効で、支払期限も記載します。銀行振込の前払いは原則訪問前日まで。前日・当日の予約は訪問開始前に着金確認が必要です。いずれも入金確認後に予約が確定します。', tag: 'ESTIMATE'},
   {n: '03', title: 'あなたの代わりに、現地へ。', text: '確認したいポイントに沿って訪問。撮影した動画と写真は、LINEでお届けします。撮影できない場所がある場合は、事前に相談して内容を調整します。', tag: 'VISIT'},
 ];

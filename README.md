@@ -71,9 +71,11 @@ npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at
 
 ## LINEでの相談受付
 
-新しいご相談はLINE公式アカウント（[Remex公式LINE](https://lin.ee/ZvrRtXZ)）のみで受け付けます。LINE公式アカウントのトークでお問い合わせへの返信・受付確認を行ってください。ウェブフォームは終了しており、旧フォームAPIも新規送信を受け付けません。
+新しいご相談はLINEのみで受け付けます。サイトの相談ボタンから[LIFF事前相談フォーム](https://liff.line.me/2011950025-CXAIFaev)を開き、入力内容を確認後、LINE公式アカウントとのトーク画面へ移動します。内容はLINEの入力欄に下書きされるため、お客様が内容を確認して送信します。フォーム入力内容は本サイトのサーバーやD1に保存されません。ウェブフォームは終了しており、旧フォームAPIも新規送信を受け付けません。
 
-公式アカウントのあいさつメッセージに、相談テンプレート（場所・希望日時・してほしいこと・写真/動画の希望）を設定しておくと、相談のやりとりがスムーズです。旧フォーム通知用のLINE Messaging API処理は停止しており、関連するCloudflare secretsが設定済みでも現在は読み取り・使用しません。secretの変更・削除はこの変更では行っていません。
+事前相談フォームはLINE LoginチャンネルのLIFFアプリ（LIFF ID: `2011950025-CXAIFaev`、URL: `https://liff.line.me/2011950025-CXAIFaev`）で開きます。Endpoint URLは `https://remex-site.suuu-sh.workers.dev/apply`、画面サイズはFullです。フォームは `oaMessage` URLスキームで公式アカウントとのトークに入力文をセットします。ユーザーがLINEアプリ上で送信するまで、相談内容はRemexに届きません。LIFFは必須の `openid` のみを設定し、RemexフォームではLINEのユーザー識別情報を取得・保存しません。`profile` と `chat_message.write` 権限は付けません。
+
+フォームの項目・送信文面は `src/components/PreApplicationPage.tsx` と `src/preApplication.ts` にあります。LIFFアプリは静的アセットとして配信し、D1やMessaging APIのアクセストークンを使いません。旧フォーム通知用のLINE Messaging API処理は停止しており、関連するCloudflare secretsが設定済みでも現在は読み取り・使用しません。secretの変更・削除はこの変更では行っていません。
 
 ### 事業者情報の開示依頼が届いたら
 

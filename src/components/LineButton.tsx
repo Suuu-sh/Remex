@@ -1,4 +1,4 @@
-import {LINE_URL} from '../content';
+import {LINE_APPLICATION_URL} from '../content';
 import {Arrow} from './Icons';
 
 function LineMark({size = 18}: {size?: number}) {
@@ -11,9 +11,9 @@ function LineMark({size = 18}: {size?: number}) {
 }
 
 /** Primary consultation CTA. */
-export default function LineButton({label = 'LINEで相談する', small = false, className = ''}: {label?: string; small?: boolean; className?: string}) {
+export default function LineButton({label = 'LINEで事前相談する', small = false, className = ''}: {label?: string; small?: boolean; className?: string}) {
   return (
-    <a className={`button line${small ? ' small' : ''} ${className}`} href={LINE_URL} target="_blank" rel="noopener noreferrer">
+    <a className={`button line${small ? ' small' : ''} ${className}`} href={LINE_APPLICATION_URL} target="_blank" rel="noopener noreferrer">
       <LineMark size={small ? 16 : 20}/>{label}<Arrow/>
     </a>
   );
