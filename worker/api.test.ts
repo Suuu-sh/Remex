@@ -81,7 +81,10 @@ test('scheduled cleanup deletes requests older than 180 days', async () => {
 
 test('Worker pushes a LINE notice only when LINE secrets are configured', async () => {
   const calls: {url: string; init: RequestInit}[] = [];
+  const warnings: string[] = [];
   const realFetch = globalThis.fetch;
+  const realWarn = console.warn;
+  console.warn = (message?: unknown) => { warnings.push(String(message)); };
   globalThis.fetch = (async (url: string, init: RequestInit) => { calls.push({url, init}); return new Response('{}'); }) as typeof fetch;
   try {
     const {env} = createEnv();
@@ -98,7 +101,13 @@ test('Worker pushes a LINE notice only when LINE secrets are configured', async 
 
     globalThis.fetch = (async () => { throw new Error('network'); }) as typeof fetch;
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
+    assert.match(warnings[0], /"reason":"network_error"/);
+
+    globalThis.fetch = (async () => new Response('{}', {status: 401})) as typeof fetch;
+    assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
+    assert.match(warnings[1], /"status":401/);
   } finally {
     globalThis.fetch = realFetch;
+    console.warn = realWarn;
   }
 });

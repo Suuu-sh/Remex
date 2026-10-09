@@ -22,13 +22,17 @@ async function notifyLine(env: Env, input: StoredRequest, id: string): Promise<v
     `ID: ${id}`,
   ];
   try {
-    await fetch('https://api.line.me/v2/bot/message/push', {
+    const response = await fetch('https://api.line.me/v2/bot/message/push', {
       method: 'POST',
       headers: {'Content-Type': 'application/json', Authorization: `Bearer ${env.LINE_CHANNEL_ACCESS_TOKEN}`},
       body: JSON.stringify({to: env.LINE_ADMIN_USER_ID, messages: [{type: 'text', text: lines.join('\n').slice(0, 1000)}]}),
     });
+    if (!response.ok) {
+      console.warn(JSON.stringify({event: 'line_notification_failed', requestId: id, status: response.status}));
+    }
   } catch {
-    // The request is already stored; a failed notice must not fail the submission.
+    // Do not log the error object: it may contain request details. The form is already stored.
+    console.warn(JSON.stringify({event: 'line_notification_failed', requestId: id, reason: 'network_error'}));
   }
 }
 

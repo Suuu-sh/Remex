@@ -19,6 +19,7 @@ export function Footer() {
             <a href="#service">できること</a>
             <a href="#cases">活用例</a>
             <a href="#delivery">届け方</a>
+            <a href="#samples">記録の見本</a>
             <a href="#price">料金</a>
             <a href="#safety">安心への約束</a>
             <a href="#faq">よくある質問</a>
