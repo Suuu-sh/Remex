@@ -70,7 +70,7 @@ export default function PreApplicationPage() {
   const progress = showReview ? 100 : ((step + 1) / questions.length) * 100;
 
   return (
-    <main className="apply-page">
+    <main className={`apply-page${showReview ? ' is-review' : ''}`}>
       <header className="apply-header">
         <a className="apply-brand" href="/" aria-label="Remex ホーム">Remex<span>.</span></a>
         <span className="mono">LINE / PRE-APPLICATION</span>
