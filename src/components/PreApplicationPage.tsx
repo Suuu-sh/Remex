@@ -4,7 +4,7 @@ import {buildPreApplicationMessage, createOfficialAccountDraftUrl, type PreAppli
 const LINE_BASIC_ID = '@034laqhf';
 
 const initialDraft: PreApplicationDraft = {
-  place: '', purpose: '', plan: '', deliverables: [], details: '',
+  place: '', purpose: '', plan: '', details: '',
 };
 
 export default function PreApplicationPage() {
@@ -21,15 +21,6 @@ export default function PreApplicationPage() {
 
   function update<K extends keyof PreApplicationDraft>(key: K, value: PreApplicationDraft[K]) {
     setDraft(current => ({...current, [key]: value}));
-  }
-
-  function toggleDeliverable(value: string) {
-    setDraft(current => ({
-      ...current,
-      deliverables: current.deliverables.includes(value)
-        ? current.deliverables.filter(item => item !== value)
-        : [...current.deliverables, value],
-    }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,19 +87,6 @@ export default function PreApplicationPage() {
               </select>
               <small>別途、往復交通費などがかかる場合があります。<a href="/pricing" target="_blank" rel="noreferrer">料金の詳細</a></small>
             </label>
-
-            <fieldset className="apply-fieldset">
-              <legend>希望する記録 <small>任意</small></legend>
-              <div className="apply-choice-row">
-                {[{value: '一人称動画', label: '一人称動画'}].map(item => (
-                  <label className="apply-choice" key={item.value}>
-                    <input type="checkbox" checked={draft.deliverables.includes(item.value)} onChange={() => toggleDeliverable(item.value)}/>
-                    <span>{item.label}</span>
-                  </label>
-                ))}
-              </div>
-              <small>撮影は施設のルールに従います。</small>
-            </fieldset>
 
             <label className="apply-field" htmlFor="apply-details">
               <span>詳細な内容 <b>必須</b></span>
