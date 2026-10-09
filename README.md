@@ -54,12 +54,12 @@ npm run deploy:cloudflare
 
 ## GitHub Actions
 
-`.github/workflows/deploy-cloudflare.yml` は `workflow_dispatch` による手動実行のみです。GitHubのリポジトリ設定に次のActions secretsを登録すると利用できます。
+`.github/workflows/deploy-cloudflare.yml` は `main` へのpush（PRのマージを含む）で自動実行されます。`workflow_dispatch` で手動実行もできます。GitHubのリポジトリ設定に次のActions secretsを登録すると利用できます。
 
 - `CLOUDFLARE_API_TOKEN`: WorkersデプロイとD1マイグレーションに必要な権限を持つトークン
 - `CLOUDFLARE_ACCOUNT_ID`: デプロイ先CloudflareアカウントID
 
-workflowはテスト、ビルド、リモートD1マイグレーション、Workerデプロイの順で実行します。自動デプロイではなく、公開タイミングを選べる設定です。
+workflowはテスト、ビルド、リモートD1マイグレーション、Workerデプロイの順で実行します。テストかビルドが失敗した場合はデプロイされません。
 
 ## 受付データの確認
 
