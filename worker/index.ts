@@ -18,21 +18,21 @@ async function getLineFailureReason(response: Response): Promise<string> {
   if (response.status === 403) return 'channel_forbidden';
   if (response.status !== 400) return 'line_api_error';
 
-  const reader = response.body?.getReader();
-  if (!reader) return 'line_api_error';
   try {
-    const {done, value} = await reader.read();
-    if (done || !value || value.byteLength > 2048) return 'line_api_error';
-    const body = JSON.parse(new TextDecoder().decode(value)) as {message?: unknown};
-    if (typeof body.message !== 'string') return 'line_api_error';
-    const message = body.message.toLowerCase();
-    if (message.includes('user id') && /(doesn't exist|does not exist|invalid)/.test(message)) return 'recipient_invalid';
-    if (message.includes('invalid message')) return 'invalid_message';
+    const body = await response.json() as {message?: unknown; details?: unknown};
+    const details = Array.isArray(body.details) ? body.details : [];
+    const detailItems = details.filter((detail): detail is {message?: unknown; property?: unknown} => Boolean(detail) && typeof detail === 'object') as {message?: unknown; property?: unknown}[];
+    const errorText = [body.message, ...details.flatMap((detail) => {
+      if (!detail || typeof detail !== 'object') return [];
+      const item = detail as {message?: unknown; property?: unknown};
+      return [item.message, item.property];
+    })].filter((value): value is string => typeof value === 'string').join(' ').toLowerCase();
+    if (errorText.includes('user id') && /(doesn't exist|does not exist|invalid)/.test(errorText)) return 'recipient_invalid';
+    if (errorText.includes('invalid') && detailItems.some((item) => item.property === 'to')) return 'recipient_invalid';
+    if (errorText.includes('invalid message') || errorText.includes('message object')) return 'invalid_message';
     return 'line_api_error';
   } catch {
     return 'line_api_error';
-  } finally {
-    await reader.cancel().catch(() => undefined);
   }
 }
 

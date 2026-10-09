@@ -110,7 +110,10 @@ test('Worker pushes a LINE notice only when LINE secrets are configured', async 
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
     assert.match(warnings[1], /"reason":"network_error"/);
 
-    globalThis.fetch = (async () => new Response(JSON.stringify({message: "The user ID doesn't exist in this channel."}), {status: 400})) as typeof fetch;
+    globalThis.fetch = (async () => new Response(JSON.stringify({
+      message: 'The request body has 1 error(s)',
+      details: [{message: 'The property, to, in the request body is invalid', property: 'to'}],
+    }), {status: 400})) as typeof fetch;
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
     assert.match(warnings[2], /"status":400/);
     assert.match(warnings[2], /"reason":"recipient_invalid"/);
