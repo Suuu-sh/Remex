@@ -53,7 +53,7 @@ export default function Hero() {
           <dl className="hero-facts intro" style={vars({'--d': '1050ms'})}>
             <div><dt>対応エリア</dt><dd>東京<b>23</b>区</dd></div>
             <div><dt>訪問時間</dt><dd><b>30</b>分〜</dd></div>
-            <div><dt>料金の目安</dt><dd>¥<b>3,000</b>〜</dd></div>
+            <div><dt>料金の目安</dt><dd>¥<b>6,600</b>〜</dd></div>
           </dl>
         </div>
         <div className="hero-visual intro" style={vars({'--d': '300ms'})}>
