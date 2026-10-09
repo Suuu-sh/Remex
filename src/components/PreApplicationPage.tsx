@@ -99,6 +99,7 @@ export default function PreApplicationPage() {
 
           {showReview ? (
             <section className="apply-review" aria-labelledby="review-title">
+              <p className="apply-question-label">送信内容<span className="is-required">必須</span></p>
               <h2 id="review-title">送信前に内容を確認してください。</h2>
               <p>LINE公式アカウントとのトークが開き、申請文が入力欄に入ります。内容を確認・編集して、LINEの送信ボタンを押してください。</p>
               <pre className="apply-message-preview">{buildPreApplicationMessage(draft)}</pre>
