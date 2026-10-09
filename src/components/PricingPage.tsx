@@ -62,7 +62,7 @@ export default function PricingPage() {
               <strong>撮影・施設ルールで許可される場合、編集なしの一人称動画を1本お届けします。</strong>
             </article>
           </div>
-          <p className="pricing-not-offered pricing-photo-note" data-reveal>写真納品は基本料金に含まれず、現在は標準提供していません。ご希望時のみ個別に相談を受けますが、写真納品に適した機材が整っていないため、対応をお約束できません。機材が整い次第、正式な提供を検討します。</p>
+          <p className="pricing-not-offered pricing-photo-note" data-reveal>写真での記録・納品は準備中です。</p>
         </section>
 
         <section className="pricing-costs" aria-labelledby="pricing-costs-title">

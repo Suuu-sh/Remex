@@ -9,15 +9,15 @@ test('pre-application message includes the selected visit details without collec
     preferredDate1: '2026-10-12T14:30',
     preferredDate2: '',
     plan: '60分（現地作業 ¥9,900）',
-    deliverables: ['写真', '一人称動画'],
+    deliverables: ['一人称動画'],
     details: '駅から物件までの夜道を見てほしい。',
   });
 
   assert.match(message, /場所: 渋谷駅 南口/);
   assert.match(message, /希望日時（第1希望）: 2026\/10\/12 14:30/);
   assert.match(message, /希望日時（第2希望）: 未定/);
-  assert.match(message, /希望する記録: 写真・一人称動画/);
-  assert.match(message, /写真納品は基本サービスに含まれず、ご希望時のみ個別相談です。機材の都合により現状は対応未確約/);
+  assert.match(message, /希望する記録: 一人称動画/);
+  assert.doesNotMatch(message, /写真|個別相談/);
   assert.doesNotMatch(message, /メールアドレス|電話番号/);
 });
 
