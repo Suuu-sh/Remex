@@ -82,14 +82,20 @@ test('scheduled cleanup deletes requests older than 180 days', async () => {
 test('Worker pushes a LINE notice only when LINE secrets are configured', async () => {
   const calls: {url: string; init: RequestInit}[] = [];
   const warnings: string[] = [];
+  const infos: string[] = [];
   const realFetch = globalThis.fetch;
   const realWarn = console.warn;
+  const realInfo = console.info;
   console.warn = (message?: unknown) => { warnings.push(String(message)); };
+  console.info = (message?: unknown) => { infos.push(String(message)); };
   globalThis.fetch = (async (url: string, init: RequestInit) => { calls.push({url, init}); return new Response('{}'); }) as typeof fetch;
   try {
     const {env} = createEnv();
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
     assert.equal(calls.length, 0);
+    assert.match(warnings[0], /"event":"line_notification_skipped"/);
+    assert.match(warnings[0], /"tokenConfigured":false/);
+    assert.match(warnings[0], /"recipientConfigured":false/);
 
     Object.assign(env, {LINE_CHANNEL_ACCESS_TOKEN: 'token', LINE_ADMIN_USER_ID: 'U123'});
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
@@ -98,16 +104,20 @@ test('Worker pushes a LINE notice only when LINE secrets are configured', async 
     const body = JSON.parse(String(calls[0].init.body));
     assert.equal(body.to, 'U123');
     assert.match(body.messages[0].text, /東京駅周辺/);
+    assert.match(infos[0], /"event":"line_notification_accepted"/);
 
     globalThis.fetch = (async () => { throw new Error('network'); }) as typeof fetch;
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
-    assert.match(warnings[0], /"reason":"network_error"/);
+    assert.match(warnings[1], /"reason":"network_error"/);
 
-    globalThis.fetch = (async () => new Response('{}', {status: 401})) as typeof fetch;
+    globalThis.fetch = (async () => new Response(JSON.stringify({message: "The user ID doesn't exist in this channel."}), {status: 400})) as typeof fetch;
     assert.equal((await worker.fetch(post(validRequest), env)).status, 201);
-    assert.match(warnings[1], /"status":401/);
+    assert.match(warnings[2], /"status":400/);
+    assert.match(warnings[2], /"reason":"recipient_invalid"/);
+    assert.doesNotMatch(warnings[2], /doesn't exist/);
   } finally {
     globalThis.fetch = realFetch;
     console.warn = realWarn;
+    console.info = realInfo;
   }
 });

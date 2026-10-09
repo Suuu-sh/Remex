@@ -12,9 +12,40 @@ export interface Env {
 
 type StoredRequest = {mode: 'request' | 'inquiry'; name: string; place: string; preferred: string};
 
+/** Converts LINE errors into an allowlisted reason without logging response details. */
+async function getLineFailureReason(response: Response): Promise<string> {
+  if (response.status === 401) return 'token_unauthorized';
+  if (response.status === 403) return 'channel_forbidden';
+  if (response.status !== 400) return 'line_api_error';
+
+  const reader = response.body?.getReader();
+  if (!reader) return 'line_api_error';
+  try {
+    const {done, value} = await reader.read();
+    if (done || !value || value.byteLength > 2048) return 'line_api_error';
+    const body = JSON.parse(new TextDecoder().decode(value)) as {message?: unknown};
+    if (typeof body.message !== 'string') return 'line_api_error';
+    const message = body.message.toLowerCase();
+    if (message.includes('user id') && /(doesn't exist|does not exist|invalid)/.test(message)) return 'recipient_invalid';
+    if (message.includes('invalid message')) return 'invalid_message';
+    return 'line_api_error';
+  } catch {
+    return 'line_api_error';
+  } finally {
+    await reader.cancel().catch(() => undefined);
+  }
+}
+
 /** Pushes a short new-request notice to the operator's LINE. Never throws. */
 async function notifyLine(env: Env, input: StoredRequest, id: string): Promise<void> {
-  if (!env.LINE_CHANNEL_ACCESS_TOKEN || !env.LINE_ADMIN_USER_ID) return;
+  if (!env.LINE_CHANNEL_ACCESS_TOKEN || !env.LINE_ADMIN_USER_ID) {
+    console.warn(JSON.stringify({
+      event: 'line_notification_skipped',
+      tokenConfigured: Boolean(env.LINE_CHANNEL_ACCESS_TOKEN),
+      recipientConfigured: Boolean(env.LINE_ADMIN_USER_ID),
+    }));
+    return;
+  }
   const lines = [
     input.mode === 'request' ? '【Remex】フォームから訪問の相談が届きました' : '【Remex】フォームからお問い合わせが届きました',
     `お名前: ${input.name}`,
@@ -28,8 +59,15 @@ async function notifyLine(env: Env, input: StoredRequest, id: string): Promise<v
       body: JSON.stringify({to: env.LINE_ADMIN_USER_ID, messages: [{type: 'text', text: lines.join('\n').slice(0, 1000)}]}),
     });
     if (!response.ok) {
-      console.warn(JSON.stringify({event: 'line_notification_failed', requestId: id, status: response.status}));
+      console.warn(JSON.stringify({
+        event: 'line_notification_failed',
+        requestId: id,
+        status: response.status,
+        reason: await getLineFailureReason(response),
+      }));
+      return;
     }
+    console.info(JSON.stringify({event: 'line_notification_accepted', requestId: id, status: response.status}));
   } catch {
     // Do not log the error object: it may contain request details. The form is already stored.
     console.warn(JSON.stringify({event: 'line_notification_failed', requestId: id, reason: 'network_error'}));
