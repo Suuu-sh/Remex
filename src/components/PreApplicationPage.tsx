@@ -37,13 +37,15 @@ export default function PreApplicationPage() {
       </header>
 
       <section className="apply-main" aria-labelledby="apply-title">
-        <p className="eyebrow"><span className="dot"/> BEFORE WE VISIT</p>
-        <h1 id="apply-title">現地へ行く前に、<br/>希望を教えてください。</h1>
-        <p className="apply-lead">場所と確認したいことを送るだけで大丈夫です。内容を確認して、対応可否・料金・日程をLINEでご案内します。</p>
+        <div className="apply-intro">
+          <p className="eyebrow"><span className="dot"/> BEFORE WE VISIT</p>
+          <h1 id="apply-title">現地へ行く前に、<br/>希望を教えてください。</h1>
+          <p className="apply-lead">場所と確認したいことを送るだけで大丈夫です。内容を確認して、対応可否・料金・日程をLINEでご案内します。</p>
 
-        <div className="apply-notice" role="note">
-          <strong>これは事前相談です</strong>
-          <p>フォーム送信だけでは予約・依頼は確定しません。内容と見積もりに合意いただき、入金確認後に予約が確定します。</p>
+          <div className="apply-notice" role="note">
+            <strong>これは事前相談です</strong>
+            <p>フォーム送信だけでは予約・依頼は確定しません。内容と見積もりに合意いただき、入金確認後に予約が確定します。</p>
+          </div>
         </div>
 
         {draftUrl ? (
@@ -90,7 +92,7 @@ export default function PreApplicationPage() {
 
             <label className="apply-field" htmlFor="apply-details">
               <span>詳細な内容 <b>必須</b></span>
-              <textarea id="apply-details" name="details" required rows={5} maxLength={600} placeholder="見たい場所、気になる点、撮影してほしい範囲など。日時が決まっている場合はその日時も記入してください" value={draft.details} onChange={event => update('details', event.target.value)}/>
+              <textarea id="apply-details" name="details" required rows={3} maxLength={600} placeholder="見たい場所、気になる点、撮影してほしい範囲など。日時が決まっている場合はその日時も記入してください" value={draft.details} onChange={event => update('details', event.target.value)}/>
               <small>開催日時が固定されたイベントなどは、その日時を記入してください。運営者の予定などにより、その日時に対応できない場合があります。</small>
               <small className="apply-counter">{draft.details.length} / 600</small>
             </label>
