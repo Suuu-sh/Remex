@@ -119,7 +119,7 @@ export default function RequestForm() {
             <ol className="line-steps">
               <li><b>1</b>友だち追加</li>
               <li><b>2</b>テンプレートに沿って送信</li>
-              <li><b>3</b>見積もり・日程をトークで確認</li>
+              <li><b>3</b>見積もり・期限を確認。着金後に予約確定</li>
               <li><b>4</b>動画と写真をLINEでお届け</li>
             </ol>
             <LineButton/>

@@ -6,14 +6,17 @@ const links = [
   {href: '#service', label: 'できること'},
   {href: '#cases', label: '活用例'},
   {href: '#delivery', label: '届け方'},
-  {href: '#price', label: '料金'},
+  {href: '/pricing', label: '料金'},
   {href: '#safety', label: '安心への約束'},
   {href: '#faq', label: 'よくある質問'},
 ];
 
+const isPricingPage = () => window.location.pathname.replace(/\/+$/, '') === '/pricing';
+const siteHref = (href: string) => isPricingPage() && href.startsWith('#') ? `/${href}` : href;
+
 export function Brand() {
   return (
-    <a className="brand" href="#top" aria-label="Remex ホーム">
+    <a className="brand" href={isPricingPage() ? '/' : '#top'} aria-label="Remex ホーム">
       <img className="brand-mark" src="/favicon.svg" alt="" aria-hidden="true"/>
       <span className="brand-wordmark">remex</span>
     </a>
@@ -44,7 +47,7 @@ export default function Header() {
         <div className="header-inner">
           <Brand/>
           <nav aria-label="メインメニュー">
-            {links.map(l => <a key={l.href} href={l.href}>{l.label}</a>)}
+            {links.map(l => <a key={l.href} href={siteHref(l.href)}>{l.label}</a>)}
           </nav>
           <LineButton small label="LINEで相談"/>
           <button
@@ -63,7 +66,7 @@ export default function Header() {
       <div id="mobile-menu" className={`mobile-menu${open ? ' is-open' : ''}`} inert={!open} aria-hidden={!open}>
         <nav aria-label="モバイルメニュー">
           {links.map((l, i) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)} style={{transitionDelay: `${80 + i * 50}ms`}}>
+            <a key={l.href} href={siteHref(l.href)} onClick={() => setOpen(false)} style={{transitionDelay: `${80 + i * 50}ms`}}>
               <small>0{i + 1}</small>{l.label}
             </a>
           ))}

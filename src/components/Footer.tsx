@@ -4,11 +4,14 @@ import {Brand} from './Header';
 import {Arrow} from './Icons';
 import LineButton from './LineButton';
 
+const isPricingPage = () => window.location.pathname.replace(/\/+$/, '') === '/pricing';
+const siteHref = (href: string) => isPricingPage() && href.startsWith('#') ? `/${href}` : href;
+
 export function Footer() {
   return (
     <footer className="footer" data-dark>
       <div className="footer-inner">
-        <a className="footer-cta" href="#request">
+        <a className="footer-cta" href={siteHref('#request')}>
           <span className="mono">START A REQUEST</span>
           <strong>あなたの代わりに、<br/>行ってきます。</strong>
           <span className="footer-cta-arrow"><Arrow size={28}/></span>
@@ -16,16 +19,16 @@ export function Footer() {
         <div className="footer-row">
           <Brand/>
           <nav aria-label="フッターメニュー">
-            <a href="#service">できること</a>
-            <a href="#cases">活用例</a>
-            <a href="#delivery">届け方</a>
-            <a href="#samples">記録の見本</a>
-            <a href="#price">料金</a>
-            <a href="#safety">安心への約束</a>
-            <a href="#faq">よくある質問</a>
-            <a href="#privacy">個人情報の取り扱い</a>
-            <a href="#terms">利用・キャンセル条件</a>
-            <a href="#tokusho">特定商取引法に基づく表記</a>
+            <a href={siteHref('#service')}>できること</a>
+            <a href={siteHref('#cases')}>活用例</a>
+            <a href={siteHref('#delivery')}>届け方</a>
+            <a href={siteHref('#samples')}>記録の見本</a>
+            <a href="/pricing">料金</a>
+            <a href={siteHref('#safety')}>安心への約束</a>
+            <a href={siteHref('#faq')}>よくある質問</a>
+            <a href={siteHref('#privacy')}>個人情報の取り扱い</a>
+            <a href={siteHref('#terms')}>利用・キャンセル条件</a>
+            <a href={siteHref('#tokusho')}>特定商取引法に基づく表記</a>
           </nav>
           <small>© {new Date().getFullYear()} Remex <span>／</span> 東京23区・運営者対応</small>
         </div>

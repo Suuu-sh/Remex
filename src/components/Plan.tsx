@@ -11,7 +11,7 @@ export function Process() {
         <div className="process-head">
           <p className="eyebrow" data-reveal><span className="dot"/> HOW IT WORKS</p>
           <h2 data-reveal>相談から、<br/>お届けまで。</h2>
-          <p data-reveal>LINEやフォームでの相談だけでは、予約もお支払いも発生しません。内容と費用に合意してから、訪問が決まります。</p>
+          <p data-reveal>LINEやフォームの相談だけでは予約は確定しません。見積もりは7日間有効で、支払期限を記載します。銀行振込の前払いは原則、訪問前日までです。前日・当日の予約は訪問開始前に着金確認が必要で、いずれも入金確認後に予約が確定します。</p>
         </div>
         <ol className="timeline" ref={ref} style={vars({'--p': progress})}>
           <span className="timeline-track" aria-hidden="true"><span/></span>
@@ -66,7 +66,7 @@ export function Pricing() {
           <p className="eyebrow" data-reveal><span className="dot"/> SIMPLE PRICING</p>
           <h2 data-reveal>必要な時間だけ、<br/>頼めます。</h2>
         </div>
-        <p data-reveal>まずは訪問時間を目安に。<br/>総額は、訪問前にご案内します。</p>
+        <p data-reveal>東京23区内・1か所の訪問料金です。<br/>含まれる内容と追加費用を事前にご案内します。</p>
       </div>
 
       <div className="price-layout">
@@ -110,19 +110,19 @@ export function Pricing() {
             </button>
           ))}
           <p className="price-notes" data-reveal>
-            交通費・入場料などの実費は別途。訪問範囲、時間の数え方、撮影オプションなども事前に確認し、見積もりをご案内します。追加費用を無断で発生させることはありません。撮った動画の編集は、今後のオプションとして準備中です。
+            準備・基本レポート、確認項目（最大3／5／8件）、写真（最大10／20／30枚）を含みます。撮影が許可される場合は未編集の一人称動画1本をお届けします。往復の公共交通機関運賃は別途です。<a href="/pricing">料金・追加費用・お支払いの詳細を見る ↗</a>
           </p>
         </div>
       </div>
 
-      <a className="biz-card" href="#request" data-reveal onPointerMove={trackPointer}>
+      <a className="biz-card" href="/pricing" data-reveal onPointerMove={trackPointer}>
         <div>
           <p className="mono">FOR BUSINESS</p>
           <strong>法人・事業者の方へ</strong>
-          <p>内容・範囲に応じて個別にお見積もりします。</p>
+          <p>基本料金は共通。追加範囲や報告形式は個別にお見積もりします。</p>
         </div>
         <div className="biz-price">
-          <span>現地確認・調査の目安</span>
+          <span>追加範囲を含む個別見積もりの目安</span>
           <b>¥15,000〜¥30,000</b>
         </div>
         <span className="biz-arrow"><Arrow size={22}/></span>
