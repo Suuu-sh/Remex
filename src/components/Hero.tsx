@@ -43,7 +43,7 @@ export default function Hero() {
             <span className="rotator-tail">を、確かめに。</span>
           </div>
           <p className="hero-note intro" style={vars({'--d': '850ms'})}>
-            時間がない日も、遠くて行けない場所も。GoProの一人称動画と写真で届ける、現地訪問サービス。
+            時間がない日も、遠くて行けない場所も。GoProの一人称動画と基本レポートで届ける現地訪問サービス。写真は基本料金に含まず、ご希望時のみ個別に相談します（対応未確約）。
           </p>
           <div className="hero-actions intro" style={vars({'--d': '950ms'})}>
             <LineButton/>

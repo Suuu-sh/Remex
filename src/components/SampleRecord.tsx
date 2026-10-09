@@ -17,7 +17,7 @@ export default function SampleRecordSection() {
           <p className="eyebrow" data-reveal><span className="dot"/> FIELD NOTE / SAMPLE</p>
           <h2 id="samples-title" data-reveal>記録の見本を、<br/>ご依頼の前に。</h2>
         </div>
-        <p data-reveal>動画や写真の仕上がりをイメージしていただけるよう、自主制作のサンプルを掲載する予定です。実際のご依頼事例とは分けてご紹介します。</p>
+        <p data-reveal>一人称動画の仕上がりをイメージしていただけるよう、自主制作のサンプルを掲載する予定です。実際のご依頼事例とは分けてご紹介します。</p>
       </div>
       {samples.length > 0 ? (
         <div className="sample-grid">

@@ -112,14 +112,14 @@ export default function PreApplicationPage() {
             <fieldset className="apply-fieldset">
               <legend>希望する記録 <small>任意・複数選択可</small></legend>
               <div className="apply-choice-row">
-                {['写真', '一人称動画'].map(value => (
-                  <label className="apply-choice" key={value}>
-                    <input type="checkbox" checked={draft.deliverables.includes(value)} onChange={() => toggleDeliverable(value)}/>
-                    <span>{value}</span>
+                {[{value: '写真', label: '写真（個別相談）'}, {value: '一人称動画', label: '一人称動画'}].map(item => (
+                  <label className="apply-choice" key={item.value}>
+                    <input type="checkbox" checked={draft.deliverables.includes(item.value)} onChange={() => toggleDeliverable(item.value)}/>
+                    <span>{item.label}</span>
                   </label>
                 ))}
               </div>
-              <small>施設の撮影ルールに従います。撮影できない場合は事前に相談します。</small>
+              <small>写真納品は基本サービスに含まれず、ご希望時のみ個別相談です。写真納品に適した機材が整っていないため、対応をお約束できません。機材が整い次第、正式な提供を検討します。一人称動画・写真ともに施設の撮影ルールに従い、撮影できない場合は事前に相談します。</small>
             </fieldset>
 
             <label className="apply-field" htmlFor="apply-details">

@@ -54,7 +54,7 @@ export default function PricingPage() {
             {plans.map(plan => (
               <article className="pricing-inclusion" key={plan.mins} data-reveal>
                 <span className="mono">{plan.mins}分プラン</span>
-                <strong>現地作業{plan.mins}分 ／ 確認項目{plan.checklist}件まで ／ 写真{plan.photos}枚まで</strong>
+                <strong>現地作業{plan.mins}分 ／ 確認項目{plan.checklist}件まで</strong>
               </article>
             ))}
             <article className="pricing-inclusion pricing-inclusion-wide" data-reveal>
@@ -62,6 +62,7 @@ export default function PricingPage() {
               <strong>撮影・施設ルールで許可される場合、編集なしの一人称動画を1本お届けします。</strong>
             </article>
           </div>
+          <p className="pricing-not-offered pricing-photo-note" data-reveal>写真納品は基本料金に含まれず、現在は標準提供していません。ご希望時のみ個別に相談を受けますが、写真納品に適した機材が整っていないため、対応をお約束できません。機材が整い次第、正式な提供を検討します。</p>
         </section>
 
         <section className="pricing-costs" aria-labelledby="pricing-costs-title">

@@ -17,6 +17,7 @@ test('pre-application message includes the selected visit details without collec
   assert.match(message, /希望日時（第1希望）: 2026\/10\/12 14:30/);
   assert.match(message, /希望日時（第2希望）: 未定/);
   assert.match(message, /希望する記録: 写真・一人称動画/);
+  assert.match(message, /写真納品は基本サービスに含まれず、ご希望時のみ個別相談です。機材の都合により現状は対応未確約/);
   assert.doesNotMatch(message, /メールアドレス|電話番号/);
 });
 

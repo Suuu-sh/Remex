@@ -138,7 +138,7 @@ export default function Viewfinder() {
         <span className="call-dot"/>
         <div>
           <strong>記録中</strong>
-          <span className="vf-call-meta mono">PHOTO 12 · VIDEO 08:24</span>
+          <span className="vf-call-meta mono">REPORT · VIDEO 08:24</span>
         </div>
       </div>
       <div className="vf-map" aria-hidden="true">

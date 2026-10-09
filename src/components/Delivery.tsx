@@ -13,7 +13,7 @@ export default function Delivery() {
       <div className="delivery-copy">
         <p className="eyebrow" data-reveal><span className="dot"/> HOW YOU’LL SEE IT</p>
         <h2 data-reveal>行った気分まで、<br/>持ち帰ります。</h2>
-        <p className="delivery-lead" data-reveal>目的と現地のルールに合わせて、写真と動画で届けます。</p>
+        <p className="delivery-lead" data-reveal>基本レポートと、撮影が許可される場合の一人称動画でお届けします。写真は基本サービスに含まれず、ご希望時のみ個別に相談します（対応未確約）。</p>
         <div className="delivery-tabs" role="tablist" aria-label="お届け方法" data-reveal>
           {deliveries.map((d, i) => (
             <button
@@ -27,7 +27,7 @@ export default function Delivery() {
               onClick={() => { setActive(i); setPaused(true); }}
             >
               <span className="mono">{d.en}</span>
-              <strong>{d.label}{d.soon && <span className="soon-badge">準備中</span>}</strong>
+              <strong>{d.label}{d.badge && <span className="soon-badge">{d.badge}</span>}</strong>
               <span className="tab-text">{d.text}</span>
               <i className="tab-timer" style={vars({'--run': paused || !inView ? 'paused' : 'running'})} key={`${d.id}-${active}`}/>
             </button>
@@ -53,11 +53,11 @@ function Screen({item}: {item: DeliveryItem}) {
     case 'photo':
       return (
         <div className="scr scr-photo">
-          <header><strong>清澄白河 周辺</strong><span>12枚</span></header>
+          <header><strong>写真納品</strong><span>個別相談</span></header>
           <div className="photo-grid">
             {['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].map((c, i) => <div key={c} className={`ph ${c}`} style={vars({'--i': i})}/>)}
           </div>
-          <p className="scr-caption">駅前の通り／入口の段差／夕方の明るさ</p>
+          <p className="scr-caption">参考イメージです。写真納品は基本サービスに含まれず、希望時のみ個別相談（対応未確約）です。</p>
         </div>
       );
     case 'video':
