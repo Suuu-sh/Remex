@@ -79,11 +79,12 @@ npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at
 4. 次のコマンドを実行し、Cloudflareの入力プロンプトへ値を直接入力します。アクセストークンをチャット・ソースコード・GitHubへ貼らないでください。
 
 ```sh
-npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN
-npx wrangler secret put LINE_ADMIN_USER_ID
+npx wrangler secret put LINE_CHANNEL_ACCESS_TOKEN --name remex-site
+npx wrangler secret put LINE_ADMIN_USER_ID --name remex-site
 ```
 
 `LINE_ADMIN_USER_ID` は通知を受け取る運営者のユーザーID（`U` から始まる文字列）です。両secretのどちらかが未設定の場合、通知は送られず、受付内容はD1に保存されます。LINE APIがエラーを返した場合は、個人情報を含めずWorkerログに失敗理由を記録します。
+値はWranglerのプロンプトへ直接入力し、チャット・ソースコード・GitHubへ貼らないでください。`secret put` は実行のたびにWorkerをデプロイします。設定後は `npx wrangler secret list --name remex-site` で名前だけが表示されることを確認し、フォーム送信で通知をテストしてください。
 
 ## アクセス解析
 
@@ -95,7 +96,7 @@ Cloudflare Web Analyticsを `remex-site.suuu-sh.workers.dev` に設定し、本�
 
 ## 運用開始前に残っているタスク
 
-- LINE DevelopersでMessaging APIを有効にし、`LINE_CHANNEL_ACCESS_TOKEN` と `LINE_ADMIN_USER_ID` をWorker secretとして設定。設定後、フォーム送信からLINE通知までテスト
+- LINE DevelopersのMessaging API有効化と、公式アカウントの友だち追加時の相談テンプレート設定は完了。`LINE_CHANNEL_ACCESS_TOKEN` と `LINE_ADMIN_USER_ID` をWorker secretとして設定し、フォーム送信からLINE通知までテスト
 - 特定商取引法に基づく表記を確定・掲載するため、運営者の法的氏名/登録済み屋号、住所、電話番号、追加費用、支払時期・方法、サービス提供時期、キャンセル条件を確認（公開方法を含め、実際の申込導線に応じて法令の専門家へ確認）
 - 公開可能な自主制作の記録サンプルを撮影・掲載（現時点ではサンプル未公開）
 - 依頼ごとの料金、交通費・入場料等の実費、支払方法・期日を見積もりで合意
