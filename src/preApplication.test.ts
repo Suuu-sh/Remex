@@ -24,3 +24,21 @@ test('official account draft URL percent-encodes both the account ID and message
   assert.match(url, /^https:\/\/line\.me\/R\/oaMessage\/%40034laqhf\//);
   assert.ok(url.includes(encodeURIComponent('【Remex 事前相談】\n場所: 渋谷')));
 });
+
+test('English pre-application message uses English labels and preserves entered values', async () => {
+  const {buildPreApplicationMessage} = await import('./preApplication');
+  const message = buildPreApplicationMessage({
+    place: '  Shibuya Station\nSouth Exit ',
+    purpose: 'Check a potential neighborhood for a move',
+    plan: '60 minutes (on-site work ¥9,900)',
+    details: 'Please check the walk from the station to the property.',
+  }, 'en');
+
+  assert.match(message, /^\[Remex Pre-application\]/);
+  assert.match(message, /Place: Shibuya Station South Exit/);
+  assert.match(message, /Purpose: Check a potential neighborhood for a move/);
+  assert.match(message, /Preferred plan: 60 minutes \(on-site work ¥9,900\)/);
+  assert.match(message, /Details:\nPlease check the walk from the station to the property\./);
+  assert.doesNotMatch(message, /場所:|相談内容:|希望プラン:|詳細な内容:/);
+  assert.ok(createOfficialAccountDraftUrl('@034laqhf', message).includes(encodeURIComponent(message)));
+});

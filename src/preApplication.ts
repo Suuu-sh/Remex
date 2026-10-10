@@ -1,3 +1,5 @@
+import type {Locale} from './i18n';
+
 export type PreApplicationDraft = {
   place: string;
   purpose: string;
@@ -9,7 +11,17 @@ function oneLine(value: string): string {
   return value.trim().replace(/[\r\n]+/g, ' ');
 }
 
-export function buildPreApplicationMessage(draft: PreApplicationDraft): string {
+export function buildPreApplicationMessage(draft: PreApplicationDraft, locale: Locale = 'ja'): string {
+  if (locale === 'en') {
+    return [
+      '[Remex Pre-application]',
+      `Place: ${oneLine(draft.place)}`,
+      `Purpose: ${draft.purpose}`,
+      `Preferred plan: ${draft.plan || 'I would like to discuss this'}`,
+      'Details:',
+      draft.details.trim(),
+    ].join('\n');
+  }
   return [
     '【Remex 事前相談】',
     `場所: ${oneLine(draft.place)}`,
