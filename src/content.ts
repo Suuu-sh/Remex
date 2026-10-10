@@ -95,3 +95,65 @@ export const useCaseRules = [
   '入場料・利用料などの実費は、事前に見積もりへ含めてご案内します',
   '記録はご依頼者のためのもの。許可なく公開・事例紹介に使いません',
 ];
+
+/** English copy for the same service and limits; amounts and availability stay identical. */
+export function getLocalizedContent(locale: 'ja' | 'en') {
+  if (locale === 'ja') return {audiences, uses, heroPlaces, steps, deliveries, wards, plans, principles, refusals, faqs, useCases, useCaseRules};
+  return {
+    audiences: [
+      {en: 'NO TIME', title: 'For when you can’t make the trip.', text: 'Work and daily life leave no room for a weekday visit. But the place you want to see won’t wait.'},
+      {en: 'TOO FAR', title: 'For when you live far away.', text: 'Getting to Tokyo from elsewhere in Japan or abroad isn’t easy. We’ll make the visit for you.'},
+    ],
+    uses: [
+      {n: '01', title: 'Get a feel for the neighborhood.', text: 'From the station to a potential home: check the lighting, slopes, and surroundings through your eyes.', label: 'NEIGHBORHOOD', icon: 'home' as IconName},
+      {n: '02', title: 'Take a look inside a shop.', text: 'Check a café or store’s crowd, entrance, and atmosphere, while following its rules.', label: 'LOCAL SHOPS', icon: 'cup' as IconName},
+      {n: '03', title: 'Experience an event.', text: 'We can attend events you can’t make. Personal admission and events that prohibit proxies are excluded.', label: 'EVENT EXPERIENCE', icon: 'ticket' as IconName},
+      {n: '04', title: 'Check a product in person.', text: 'See its color, scale, or display beyond what photos show. Purchases and contracts are not included.', label: 'PRODUCT CHECK', icon: 'tag' as IconName},
+      {n: '05', title: 'Visit an exhibition.', text: 'We’ll visit an exhibition or show and document the venue where photography is permitted.', label: 'EXHIBITION VISIT', icon: 'frame' as IconName},
+      {n: '06', title: 'See it as a customer would.', text: 'Experience a store as an ordinary customer. No covert recording or access to confidential information.', label: 'CUSTOMER EXPERIENCE', icon: 'eye' as IconName},
+    ],
+    heroPlaces: ['a walk from the station at night', 'how busy a café is', 'the feel of an event venue', 'a product’s color and scale', 'what an exhibition is like', 'a shop before it closes'],
+    steps: [
+      {n: '01', title: 'Tell us what you need on LINE.', text: 'Enter the location and details in the pre-visit form. If your request is time-sensitive, include the date and time. Once submitted, a draft is sent to our official LINE chat.', tag: 'LINE'},
+      {n: '02', title: 'Review the scope and estimate.', text: 'We’ll confirm feasibility, scope, and cost. Estimates are valid for 7 days and state the payment deadline. Bank transfer is generally due by the day before the visit; same-day and next-day bookings require confirmed payment before the visit starts. Your booking is confirmed after payment clears.', tag: 'ESTIMATE'},
+      {n: '03', title: 'We’ll make the visit for you.', text: 'We visit with your checklist and send a basic report plus one unedited first-person video when filming is permitted, via LINE.', tag: 'VISIT'},
+    ],
+    deliveries: [
+      {id: 'video' as const, label: 'First-person video', en: 'POV VIDEO', text: 'An unedited GoPro recording from the walker’s point of view, so you can get a feel for the route and distance.'},
+      {id: 'photo' as const, label: 'Photos', en: 'PHOTO', badge: 'Coming soon', text: 'Photo capture and delivery are coming soon.'},
+      {id: 'edit' as const, label: 'Video editing', en: 'EDITING', badge: 'Coming soon', text: 'Edited, easier-to-watch versions of the footage are coming soon.'},
+    ],
+    wards: ['Chiyoda', 'Chuo', 'Minato', 'Shinjuku', 'Bunkyo', 'Taito', 'Sumida', 'Koto', 'Shinagawa', 'Meguro', 'Ota', 'Setagaya', 'Shibuya', 'Nakano', 'Suginami', 'Toshima', 'Kita', 'Arakawa', 'Itabashi', 'Nerima', 'Adachi', 'Katsushika', 'Edogawa'],
+    plans: [
+      {mins: 30, price: 6600, desc: 'For a quick check', example: 'A station area or one shop entrance and its crowd', checklist: 3},
+      {mins: 60, price: 9900, desc: 'For a closer look', example: 'The route from a station to one property and nearby points', checklist: 5},
+      {mins: 90, price: 13200, desc: 'For several checkpoints', example: 'A larger exhibition or multiple points around one property', checklist: 8},
+    ],
+    principles: [
+      {n: '01', title: 'We follow the rules in public spaces.', text: 'No unauthorized filming, restricted-area entry, or actions against venue rules. We confirm permission in advance when needed.'},
+      {n: '02', title: 'We respect people’s privacy.', text: 'We do not track or surveil individuals, investigate personal information, or film people without consent.'},
+      {n: '03', title: 'No danger, deception, or impersonation.', text: 'We cannot undertake illegal or dangerous activity, impersonation, personal procedures or admission, or contracts on your behalf. A visit may be stopped for safety.'},
+    ],
+    refusals: ['Tracking or surveilling a person', 'Filming people without consent', 'Investigating personal information', 'Entering restricted areas', 'Impersonation', 'Personal-only procedures or admission', 'Purchases or contracts on your behalf', 'Covert recording or obtaining confidential information', 'Illegal or dangerous activity'],
+    faqs: [
+      {q: 'Where do you operate?', a: 'We currently serve Tokyo’s 23 wards only. Availability depends on the location and request, so please ask first.'},
+      {q: 'Can you attend an event at a specific time?', a: 'Include the date and time in the pre-visit form. Availability depends on our schedule and venue hours. A LINE inquiry does not confirm a booking.'},
+      {q: 'What is included in the base price?', a: 'Preparation, a basic report, on-site time, and the plan’s checklist at one location in Tokyo’s 23 wards. When filming is permitted, we also deliver one unedited first-person video. Round-trip public transit is charged separately.', link: {href: '/pricing', label: 'See the full pricing breakdown'}},
+      {q: 'Can I request photos?', a: 'Photo capture and delivery are coming soon.'},
+      {q: 'Can you document a shop before it closes or a building before demolition?', a: 'You’re welcome to ask. Shops are visited during business hours as an ordinary customer, following their rules. Entry into a building requires the owner’s or manager’s permission. If permission is unavailable, we can suggest documenting it from a public place.'},
+      {q: 'How do payment and cancellations work?', a: 'Consultations and estimates are free. Estimates are valid for 7 days and state the payment deadline. Bank transfer is generally due by the day before the visit; transfer fees are yours. Next-day or same-day bookings require payment to clear before work starts. Booking is confirmed after payment. Before work starts, no service fee is charged (except non-refundable expenses approved in advance). After work starts, only completed visit time is charged; unperformed time is not.', link: {href: '/#terms', label: 'Read service and cancellation terms'}},
+      {q: 'Will you publish what you record?', a: 'We never use your delivery as a case study without permission. We take care to avoid capturing bystanders and do not record where filming or publication is prohibited.'},
+    ],
+    useCases: [
+      {n: '01', en: 'MOVING', art: 'moving' as const, title: 'Check a potential home from afar.', text: 'We walk and record the route from the station to a home you’re considering, when you can’t visit in person.', note: 'Tell us what matters—street lighting, hills, nearby shops, and more.'},
+      {n: '02', en: 'FOR BUSINESS', art: 'business' as const, title: 'Check a shop or property on site.', text: 'We observe foot traffic or the surroundings of a potential location as an ordinary visitor.', note: 'The base price is the same for individuals and businesses. A custom estimate for extra scope or reporting may be around ¥15,000–¥30,000, depending on the request.'},
+      {n: '03', en: 'LAST DAY', art: 'shop' as const, title: 'Keep a record before a shop closes.', text: 'Visit a shop on its final day as an ordinary customer. You can also ask about a building before demolition or a product before it is discontinued.', note: 'We follow shop rules and filming permissions; building access requires the owner’s or manager’s approval.'},
+    ],
+    useCaseRules: [
+      'Ask early if your request has a fixed date',
+      'We film inside shops and buildings only with permission',
+      'Admission and other out-of-pocket costs are included in the estimate in advance',
+      'Your records are for you; we never publish them as a case study without permission',
+    ],
+  };
+}

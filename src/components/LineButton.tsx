@@ -1,5 +1,6 @@
 import {LINE_APPLICATION_URL} from '../content';
 import {Arrow} from './Icons';
+import {getLocale, text} from '../i18n';
 
 function LineMark({size = 18}: {size?: number}) {
   return (
@@ -12,9 +13,10 @@ function LineMark({size = 18}: {size?: number}) {
 
 /** Primary consultation CTA. */
 export default function LineButton({label = 'LINEで事前相談する', small = false, className = ''}: {label?: string; small?: boolean; className?: string}) {
+  const url = getLocale() === 'en' ? `${LINE_APPLICATION_URL}/?lang=en` : LINE_APPLICATION_URL;
   return (
-    <a className={`button line${small ? ' small' : ''} ${className}`} href={LINE_APPLICATION_URL} target="_blank" rel="noopener noreferrer">
-      <LineMark size={small ? 16 : 20}/>{label}<Arrow/>
+    <a className={`button line${small ? ' small' : ''} ${className}`} href={url} target="_blank" rel="noopener noreferrer">
+      <LineMark size={small ? 16 : 20}/>{label === 'LINEで事前相談する' && getLocale() === 'en' ? text(label, 'Request a visit on LINE') : label}<Arrow/>
     </a>
   );
 }

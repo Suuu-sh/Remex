@@ -1,7 +1,8 @@
-import {useCases, useCaseRules} from '../content';
+import {getLocalizedContent} from '../content';
 import {trackPointer, vars} from '../hooks';
 import {Check} from './Icons';
 import LineButton from './LineButton';
+import {getLocale, text} from '../i18n';
 
 const art = {
   moving: (
@@ -30,7 +31,7 @@ const art = {
     <svg viewBox="0 0 200 120" aria-hidden="true">
       <g className="lr-tag">
         <path d="M122 44h58v18h-58Z" fill="var(--orange)"/>
-        <text x="151" y="57" fontSize="8.5" fontWeight="700" textAnchor="middle" fill="#fff">テナント募集</text>
+        <text x="151" y="57" fontSize="8.5" fontWeight="700" textAnchor="middle" fill="#fff">{text('テナント募集', 'FOR LEASE')}</text>
       </g>
       <path d="M140 44 151 34 162 44" fill="none" stroke="currentColor" strokeWidth="1"/>
       <rect x="40" y="52" width="80" height="68" fill="none" stroke="currentColor" strokeWidth="1.5"/>
@@ -43,7 +44,8 @@ const art = {
 };
 
 export default function UseCases() {
-  const ticker = ['CASE 01', '引っ越し候補地', 'CASE 02', '店舗・物件の確認', 'CASE 03', '閉店前の記録', 'AND MORE', 'ご相談ください'];
+  const {useCases, useCaseRules} = getLocalizedContent(getLocale());
+  const ticker = getLocale() === 'en' ? ['CASE 01', 'Potential home', 'CASE 02', 'Shop or property', 'CASE 03', 'Before a shop closes', 'AND MORE', 'Ask us'] : ['CASE 01', '引っ越し候補地', 'CASE 02', '店舗・物件の確認', 'CASE 03', '閉店前の記録', 'AND MORE', 'ご相談ください'];
   return (
     <section id="cases" className="last" data-dark>
       <div className="last-ticker" aria-hidden="true">
@@ -60,13 +62,12 @@ export default function UseCases() {
           <div>
             <p className="eyebrow" data-reveal><span className="dot"/> USE CASES</p>
             <h2 data-reveal>
-              <span className="last-kicker">活用例</span>
-              たとえば、<br/>こんな使い方。
+            <span className="last-kicker">{text('活用例', 'USE CASES')}</span>
+              {getLocale() === 'en' ? <>Here are a few<br/>ways to use Remex.</> : <>たとえば、<br/>こんな使い方。</>}
             </h2>
           </div>
           <p data-reveal>
-            Remexのサービスはひとつだけ。あなたの代わりに現地へ行き、記録することです。<br/>
-            目的に合わせて、こんなふうに使えます。
+            {getLocale() === 'en' ? <>One service: we visit a place and document it for you.<br/>Here are a few ways people might use it.</> : <>Remexのサービスはひとつだけ。あなたの代わりに現地へ行き、記録することです。<br/>目的に合わせて、こんなふうに使えます。</>}
           </p>
         </div>
 
@@ -88,11 +89,11 @@ export default function UseCases() {
         </div>
 
         <div className="last-rules" data-reveal>
-          <p className="mono">HOW WE RECORD</p>
+          <p className="mono">{text('HOW WE RECORD', 'HOW WE WORK')}</p>
           <ul>
             {useCaseRules.map(rule => <li key={rule}><Check size={12}/>{rule}</li>)}
           </ul>
-          <LineButton label="LINEで使い方を相談"/>
+          <LineButton label={text('LINEで使い方を相談', 'Ask us on LINE')}/>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ type SampleRecord = {
   src: string;
   poster?: string;
 };
+import {getLocale, text} from '../i18n';
 
 // Add only footage made for demonstration and cleared for public release.
 // Keep real customer deliveries out of this public gallery unless separately authorized.
@@ -15,9 +16,9 @@ export default function SampleRecordSection() {
       <div className="samples-head">
         <div>
           <p className="eyebrow" data-reveal><span className="dot"/> FIELD NOTE / SAMPLE</p>
-          <h2 id="samples-title" data-reveal>記録の見本を、<br/>ご依頼の前に。</h2>
+          <h2 id="samples-title" data-reveal>{getLocale() === 'en' ? <>See a sample before<br/>you request a visit.</> : <>記録の見本を、<br/>ご依頼の前に。</>}</h2>
         </div>
-        <p data-reveal>一人称動画の仕上がりをイメージしていただけるよう、自主制作のサンプルを掲載する予定です。実際のご依頼事例とは分けてご紹介します。</p>
+        <p data-reveal>{text('一人称動画の仕上がりをイメージしていただけるよう、自主制作のサンプルを掲載する予定です。実際のご依頼事例とは分けてご紹介します。', 'We plan to share self-produced samples to show what a first-person video may look like. They will be clearly distinguished from customer visits.')}</p>
       </div>
       {samples.length > 0 ? (
         <div className="sample-grid">

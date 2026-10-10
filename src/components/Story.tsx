@@ -1,9 +1,10 @@
-import {audiences, uses} from '../content';
+import {getLocalizedContent} from '../content';
 import {useScrollProgress, trackPointer, vars} from '../hooks';
 import {Check, Icon} from './Icons';
+import {getLocale, text} from '../i18n';
 
 export function Marquee() {
-  const words = ['NEIGHBORHOOD', '街の空気', 'LOCAL SHOPS', 'お店', 'EVENTS', 'イベント', 'PRODUCTS', '商品', 'EXHIBITIONS', '展示', 'CUSTOMER VIEW', 'お客さま目線'];
+  const words = getLocale() === 'en' ? ['NEIGHBORHOOD', 'LOCAL SHOPS', 'EVENTS', 'PRODUCTS', 'EXHIBITIONS', 'CUSTOMER VIEW'] : ['NEIGHBORHOOD', '街の空気', 'LOCAL SHOPS', 'お店', 'EVENTS', 'イベント', 'PRODUCTS', '商品', 'EXHIBITIONS', '展示', 'CUSTOMER VIEW', 'お客さま目線'];
   const row = (
     <div className="marquee-row">
       {words.map(w => <span key={w}>{w}<i aria-hidden="true">↗</i></span>)}
@@ -16,21 +17,22 @@ export function Marquee() {
   );
 }
 
-const manifesto = 'Remexは、あなたが気になっている場所へ足を運び、「実際どうなんだろう？」を、一緒に確かめます。';
+const manifesto = getLocale() === 'en' ? 'Remex visits the places on your mind and helps you find out what they’re really like.' : 'Remexは、あなたが気になっている場所へ足を運び、「実際どうなんだろう？」を、一緒に確かめます。';
 
 export function Manifesto() {
   const [ref, progress] = useScrollProgress<HTMLDivElement>(0.9, 0.55);
   const chars = Array.from(manifesto);
+  const {audiences} = getLocalizedContent(getLocale());
   const lit = Math.round(progress * chars.length);
   return (
     <section className="manifesto" id="manifesto">
       <div className="manifesto-inner" ref={ref}>
         <p className="eyebrow" data-reveal><span className="dot"/> WHY REMEX</p>
         <p className="manifesto-lede" data-reveal>
-          行けない日にも、<br/>知りたい気持ちは動いている。
+          {getLocale() === 'en' ? <>Even when you can’t go,<br/>your curiosity keeps moving.</> : <>行けない日にも、<br/>知りたい気持ちは動いている。</>}
         </p>
         <p className="manifesto-body">
-          <span className="manifesto-sub">地図や口コミだけでは、わからないことがある。</span>
+          <span className="manifesto-sub">{text('地図や口コミだけでは、わからないことがある。', 'Maps and reviews can only tell you so much.')}</span>
           <span className="sr-only">{manifesto}</span>
           <span aria-hidden="true">
             {chars.map((ch, i) => <span key={i} className={i < lit ? 'on' : ''}>{ch}</span>)}
@@ -52,14 +54,15 @@ export function Manifesto() {
 }
 
 export function Services() {
+  const {uses} = getLocalizedContent(getLocale());
   return (
     <section id="service" className="section services">
       <div className="section-heading">
         <div>
           <p className="eyebrow" data-reveal><span className="dot"/> WHAT WE CAN DO</p>
-          <h2 data-reveal>その「気になる」、<br/>見に行きます。</h2>
+          <h2 data-reveal>{getLocale() === 'en' ? <>Curious about a place?<br/>We’ll go see.</> : <>その「気になる」、<br/>見に行きます。</>}</h2>
         </div>
-        <p data-reveal>目的に合わせて、訪問内容を相談。<br/>小さな下見から、仕事の現地確認まで。</p>
+        <p data-reveal>{getLocale() === 'en' ? <>Tell us what you need.<br/>From a quick look to a business site check.</> : <>目的に合わせて、訪問内容を相談。<br/>小さな下見から、仕事の現地確認まで。</>}</p>
       </div>
       <div className="bento">
         {uses.map((u, i) => (
@@ -86,7 +89,7 @@ export function Services() {
         ))}
       </div>
       <p className="section-foot" data-reveal>
-        ※ 施設内の訪問・撮影は、施設の許可やルールに従います。撮影禁止の場所がある場合は、事前に相談して訪問内容を調整します。
+        {text('※ 施設内の訪問・撮影は、施設の許可やルールに従います。撮影禁止の場所がある場合は、事前に相談して訪問内容を調整します。', 'We follow venue rules and obtain permission where needed. If filming is prohibited, we’ll discuss the visit plan in advance.')}
       </p>
     </section>
   );

@@ -1,5 +1,6 @@
 import {useEffect, useState, type ReactNode} from 'react';
 import {prefersReducedMotion} from '../hooks';
+import {text} from '../i18n';
 
 function useTimecode() {
   const [seconds, setSeconds] = useState(754);
@@ -98,7 +99,7 @@ const ground = (
 export default function Viewfinder() {
   const timecode = useTimecode();
   return (
-    <div className="viewfinder" aria-label="現地で一人称映像を記録するイメージ" role="img">
+    <div className="viewfinder" aria-label={text('現地で一人称映像を記録するイメージ', 'Illustration of a first-person field recording')} role="img">
       <div className="vf-screen">
         <div className="vf-scene">
           <div className="vf-sky"/>
@@ -127,17 +128,17 @@ export default function Viewfinder() {
       </div>
 
       <div className="vf-bubble one" aria-hidden="true">
-        <small>REMEX · 現地</small>
-        坂道、思ったより緩やかです。
+          <small>{text('REMEX · 現地', 'REMEX · ON SITE')}</small>
+          {text('坂道、思ったより緩やかです。', 'The hill is gentler than it looked.')}
       </div>
       <div className="vf-bubble two" aria-hidden="true">
         <small>CHECKPOINT 02</small>
-        入口に段差が1段あります。
+        {text('入口に段差が1段あります。', 'One step at the entrance.')}
       </div>
       <div className="vf-call" aria-hidden="true">
         <span className="call-dot"/>
         <div>
-          <strong>記録中</strong>
+            <strong>{text('記録中', 'Recording')}</strong>
           <span className="vf-call-meta mono">REPORT · VIDEO 08:24</span>
         </div>
       </div>
@@ -148,9 +149,9 @@ export default function Viewfinder() {
           <circle cx="14" cy="80" r="4" fill="#20343c"/>
           <circle className="map-pin" cx="106" cy="12" r="5" fill="#f65f32"/>
         </svg>
-        <span>駅 → 目的地　徒歩 8 分</span>
+        <span>{text('駅 → 目的地　徒歩 8 分', 'Station → destination · 8 min walk')}</span>
       </div>
-      <span className="vf-sample">※ イメージ</span>
+      <span className="vf-sample">{text('※ イメージ', '* Illustration')}</span>
     </div>
   );
 }
