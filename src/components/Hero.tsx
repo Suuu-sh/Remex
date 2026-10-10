@@ -1,4 +1,4 @@
-import {heroPlaces} from '../content';
+import {getLocalizedContent} from '../content';
 import {useCycle, vars} from '../hooks';
 import Viewfinder from './Viewfinder';
 import LineButton from './LineButton';
@@ -8,6 +8,7 @@ const titleLines = ['あなたの代わりに、', '行ってきます'];
 
 export default function Hero() {
   const en = getLocale() === 'en';
+  const {heroPlaces} = getLocalizedContent(getLocale());
   const [place] = useCycle(heroPlaces.length, 2800);
   let charIndex = 0;
   return (
@@ -24,7 +25,7 @@ export default function Hero() {
               <span className="line" key={line} aria-hidden="true">
                 {Array.from(line).map(ch => {
                   const i = charIndex++;
-                  return <span className="char" key={i} style={vars({'--i': i})}>{ch}</span>;
+                  return <span className="char" key={i} style={vars({'--i': i})}>{en && ch === ' ' ? '\u00a0' : ch}</span>;
                 })}
                 {li === (en ? 1 : titleLines.length - 1) && <span className="char orange" style={vars({'--i': charIndex})}>{en ? '.' : '。'}</span>}
               </span>
@@ -54,14 +55,14 @@ export default function Hero() {
           <dl className="hero-facts intro" style={vars({'--d': '1050ms'})}>
             <div><dt>{text('対応エリア', 'Area')}</dt><dd>{text('東京', 'Tokyo')}<b>23</b>{text('区', ' wards')}</dd></div>
             <div><dt>{text('訪問時間', 'Visit')}</dt><dd><b>30</b>{text('分〜', ' min+')}</dd></div>
-            <div><dt>{text('料金の目安', 'From')}</dt><dd>¥<b>6,600</b>〜</dd></div>
+            <div><dt>{text('料金の目安', 'From')}</dt><dd>¥<b>6,600</b>{text('〜', '+')}</dd></div>
           </dl>
         </div>
         <div className="hero-visual intro" style={vars({'--d': '300ms'})}>
           <Viewfinder/>
         </div>
       </div>
-      <a className="scroll-cue" href="#manifesto" aria-label="下へスクロール"><span/></a>
+      <a className="scroll-cue" href="#manifesto" aria-label={text('下へスクロール', 'Scroll down')}><span/></a>
     </section>
   );
 }

@@ -9,7 +9,7 @@ export default function Consultation() {
         <div className="request-intro">
           <p className="eyebrow" data-reveal><span className="dot"/> CONSULTATION</p>
           <h2 data-reveal>{getLocale() === 'en' ? <>Start with a message<br/>on LINE.</> : <>相談は、<br/>LINEから。</>}</h2>
-          <p data-reveal>{text('新しいご相談は、LINE内の事前相談フォームから受け付けています。入力内容を送信するとLINE公式アカウントとのトークに届き、内容を確認して対応可否や料金をご案内します。', 'New requests are accepted through the pre-visit form in LINE. Submit the form to send a draft to our official LINE chat; we’ll review it and let you know whether we can help and what it will cost.')}</p>
+          <p data-reveal>{text('新しいご相談は、LINE内の事前相談フォームから受け付けています。入力内容を送信するとLINE公式アカウントとのトークに届き、内容を確認して対応可否や料金をご案内します。', 'New requests are accepted through the pre-visit form in LINE. After filling it out, review the draft in our official LINE chat and press Send to submit your request. We’ll then confirm whether we can help and what it will cost.')}</p>
           <ul className="request-points" data-reveal>
             <li><Check/>{text('相談・見積もりは無料', 'Free consultation and estimate')}</li>
             <li><Check/>{text('内容と料金をご案内してから調整', 'Confirm scope and cost before booking')}</li>

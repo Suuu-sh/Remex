@@ -42,8 +42,8 @@ export default function SampleRecordSection() {
           <div className="sample-empty-mark" aria-hidden="true"><span>REC</span><i/></div>
           <div>
             <span className="mono">SELF-PRODUCED SAMPLE / COMING SOON</span>
-            <h3>自主制作の見本は、準備中です。</h3>
-            <p>現在、公開できるサンプル映像はありません。実際のご依頼事例やお客様の声を、見本として掲載することはありません。</p>
+            <h3>{text('自主制作の見本は、準備中です。', 'Self-produced samples are coming soon.')}</h3>
+            <p>{text('現在、公開できるサンプル映像はありません。実際のご依頼事例やお客様の声を、見本として掲載することはありません。', 'There are no sample videos available yet. We will not present customer visits or testimonials as samples.')}</p>
           </div>
         </div>
       )}

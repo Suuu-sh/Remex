@@ -2,7 +2,7 @@ import React from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App';
 import './style.css';
-import {getLocale} from './i18n';
+import {getLocale, localeHref} from './i18n';
 
 const locale = getLocale();
 const english = locale === 'en';
@@ -21,7 +21,9 @@ document.querySelector('meta[property="og:title"]')?.setAttribute('content', doc
 document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
 let canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
 if (!canonical) { canonical = document.createElement('link'); canonical.rel = 'canonical'; document.head.appendChild(canonical); }
-canonical.href = `${window.location.origin}${pathname}`;
+const localizedPath = localeHref(pathname, locale);
+const canonicalPath = localizedPath === '/' || localizedPath.endsWith('/') ? localizedPath : `${localizedPath}/`;
+canonical.href = `https://remex-site.suuu-sh.workers.dev${canonicalPath}`;
 if (isApply) {
   let robots = document.querySelector<HTMLMetaElement>('meta[name="robots"]');
   if (!robots) { robots = document.createElement('meta'); robots.name = 'robots'; document.head.appendChild(robots); }

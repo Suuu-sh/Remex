@@ -139,9 +139,12 @@ function ShopArt() {
 }
 
 function CompareArt() {
+  const labels = getLocale() === 'en'
+    ? ['Service flow', 'Wait time', 'Store layout', 'Product display']
+    : ['接客の流れ', '待ち時間', '店内の動線', '陳列の見せ方'];
   return (
     <ul className="card-art checklist" aria-hidden="true">
-      {['接客の流れ', '待ち時間', '店内の動線', '陳列の見せ方'].map((t, i) => (
+      {labels.map((t, i) => (
         <li key={t} style={vars({'--i': i})}><Check size={12}/>{t}</li>
       ))}
     </ul>

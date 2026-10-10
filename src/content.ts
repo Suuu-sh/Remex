@@ -114,7 +114,7 @@ export function getLocalizedContent(locale: 'ja' | 'en') {
     ],
     heroPlaces: ['a walk from the station at night', 'how busy a café is', 'the feel of an event venue', 'a product’s color and scale', 'what an exhibition is like', 'a shop before it closes'],
     steps: [
-      {n: '01', title: 'Tell us what you need on LINE.', text: 'Enter the location and details in the pre-visit form. If your request is time-sensitive, include the date and time. Once submitted, a draft is sent to our official LINE chat.', tag: 'LINE'},
+      {n: '01', title: 'Tell us what you need on LINE.', text: 'Enter the location and details in the pre-visit form. If your request is time-sensitive, include the date and time. The form opens a draft in LINE; review it and press Send in the chat to submit your request.', tag: 'LINE'},
       {n: '02', title: 'Review the scope and estimate.', text: 'We’ll confirm feasibility, scope, and cost. Estimates are valid for 7 days and state the payment deadline. Bank transfer is generally due by the day before the visit; same-day and next-day bookings require confirmed payment before the visit starts. Your booking is confirmed after payment clears.', tag: 'ESTIMATE'},
       {n: '03', title: 'We’ll make the visit for you.', text: 'We visit with your checklist and send a basic report plus one unedited first-person video when filming is permitted, via LINE.', tag: 'VISIT'},
     ],

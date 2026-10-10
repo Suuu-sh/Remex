@@ -2,7 +2,7 @@ import {useId, useState} from 'react';
 import {getLocalizedContent} from '../content';
 import {vars} from '../hooks';
 import {Cross} from './Icons';
-import {getLocale, text} from '../i18n';
+import {getLocale, localeHref, text} from '../i18n';
 
 export function Safety() {
   const {principles, refusals} = getLocalizedContent(getLocale());
@@ -80,7 +80,7 @@ export function Faq() {
                 </button>
               </h3>
               <div className="faq-a" id={`${base}-${i}`} role="region" aria-labelledby={`${base}-q${i}`}>
-                <div><p>{f.a}{'link' in f && f.link && <> <a className="faq-policy-link" href={f.link.href}>{f.link.label}</a></>}</p></div>
+                <div><p>{f.a}{'link' in f && f.link && <> <a className="faq-policy-link" href={localeHref(f.link.href)}>{f.link.label}</a></>}</p></div>
               </div>
             </div>
           );
