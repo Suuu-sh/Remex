@@ -788,6 +788,12 @@ img, svg { display: block; }
   .request-stamp { display: none; }
 }
 
+@media (min-width: 761px) and (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-visual { max-width: 520px; width: 100%; margin: 24px auto 0; }
+  .hero-visual .viewfinder { max-width: min(100%, 400px); }
+}
+
 @media (max-width: 760px) {
   :root { --radius: 18px; }
   .header-inner { height: 64px; gap: 12px; }
