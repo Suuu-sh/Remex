@@ -15,8 +15,8 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "remex-requests",
-      "database_id": "16aa9f4c-e84c-4c48-ada2-e42c10cd681b",
+      "database_name": "remex",
+      "database_id": "d1ae475d-f6ed-4974-99f3-6700d3241d1f",
       "migrations_dir": "migrations"
     }
   ],

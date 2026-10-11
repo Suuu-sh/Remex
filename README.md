@@ -36,7 +36,7 @@ npm start
 ## Cloudflare Workersでローカル確認
 
 1. CloudflareアカウントでWranglerを認証します: `npx wrangler login`
-2. 現在のCloudflareアカウントには `remex-requests` D1を作成済みで、IDは `wrangler.jsonc` に設定済みです。別アカウントを使う場合は `npx wrangler d1 create remex-requests` を実行し、表示されたIDへ置き換えてください。
+2. Cloudflare D1 `remex` のIDは `wrangler.jsonc` に設定済みです。別アカウントを使う場合は `npx wrangler d1 create remex` を実行し、表示されたIDへ置き換えてください。
 3. ローカルD1へマイグレーションし、Workers版を起動します。
 
 ```sh
@@ -67,11 +67,7 @@ workflowはテスト、ビルド、リモートD1マイグレーション、Work
 
 ## 受付データの確認
 
-過去にフォームで受け付けた記録はCloudflare D1の `requests` テーブルに残っています。この変更で既存のD1レコードやテーブルは削除しません。Workerのスケジュール処理（毎日18:00 UTC）が、各記録の受信から180日後に削除します。新しいLINE相談は本サイトのD1へ保存されません。管理画面はありません。Cloudflareアカウントのアクセスを適切に保護してください。
-
-```sh
-npx wrangler d1 execute remex-requests --remote --command "SELECT id, created_at, mode FROM requests ORDER BY created_at DESC LIMIT 20"
-```
+過去にフォームで受け付けた記録は、現行D1 `remex` へコピーしません。新しいLINE相談は本サイトのD1へ保存されません。
 
 ## LINEでの相談受付
 
