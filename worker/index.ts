@@ -1,11 +1,8 @@
 export interface Env {
   ASSETS: Fetcher;
-  DB: D1Database;
 }
 
 const LINE_URL = 'https://lin.ee/ZvrRtXZ';
-const REQUEST_RETENTION_DAYS = 180;
-const DAY_MS = 24 * 60 * 60 * 1000;
 const jsonHeaders = {
   'Cache-Control': 'no-store',
   'Content-Type': 'application/json; charset=utf-8',
@@ -34,9 +31,5 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     if (new URL(request.url).pathname.startsWith('/api/')) return handleApi(request);
     return env.ASSETS.fetch(request);
-  },
-  async scheduled(controller: ScheduledController, env: Env): Promise<void> {
-    const cutoff = new Date(controller.scheduledTime - REQUEST_RETENTION_DAYS * DAY_MS).toISOString();
-    await env.DB.prepare('DELETE FROM requests WHERE created_at < ?').bind(cutoff).run();
   },
 } satisfies ExportedHandler<Env>;

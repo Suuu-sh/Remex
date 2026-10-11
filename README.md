@@ -6,7 +6,7 @@
 
 - React / TypeScript / Vite のモバイルファーストLP
 - 開発用: Expressで生成済みLPとhealth APIを配信
-- 公開用: Cloudflare Workers Static Assets + D1。D1は過去の相談記録の保管と180日後の削除に利用
+- 公開用: Cloudflare Workers Static Assets
 - 新しいご相談はLINE公式アカウントのみで受付。旧フォームAPIへのPOSTはHTTP 410を返し、LINE公式アカウントへ案内
 - Cloudflare本番デプロイ用Wrangler設定と、GitHub Actionsの手動デプロイworkflow
 
@@ -35,16 +35,11 @@ npm start
 
 ## Cloudflare Workersでローカル確認
 
-1. CloudflareアカウントでWranglerを認証します: `npx wrangler login`
-2. Cloudflare D1 `remex` のIDは `wrangler.jsonc` に設定済みです。別アカウントを使う場合は `npx wrangler d1 create remex` を実行し、表示されたIDへ置き換えてください。
-3. ローカルD1へマイグレーションし、Workers版を起動します。
-
 ```sh
-npm run db:migrate:local
 npm run dev:cloudflare
 ```
 
-`dev:cloudflare` は先にViteで `dist/` を作り、その後Wranglerを起動します。Workers版のD1はWranglerのローカル開発ストレージに保存されます。
+`dev:cloudflare` は先にViteで `dist/` を作り、その後Wranglerのローカル開発サーバーを起動します。
 
 ## Cloudflareへのデプロイ
 
@@ -54,28 +49,24 @@ Wrangler設定は `wrangler.jsonc` です。静的ファイルとWorkerを一つ
 npm run deploy:cloudflare
 ```
 
-このコマンドはテスト・ビルド・本番D1マイグレーション・Workerデプロイを行います。本番リソースを変更するため、Cloudflare認証後に実行してください。独自ドメインはCloudflareダッシュボードで追加できます。
+このコマンドはテスト・ビルド・Workerと静的アセットのデプロイを行います。本番リソースを変更するため、Cloudflare認証後に実行してください。独自ドメインはCloudflareダッシュボードで追加できます。
 
 ## GitHub Actions
 
 `.github/workflows/deploy-cloudflare.yml` は `main` へのpush（PRのマージを含む）で自動実行されます。`workflow_dispatch` で手動実行もできます。GitHubのリポジトリ設定に次のActions secretsを登録すると利用できます。
 
-- `CLOUDFLARE_API_TOKEN`: WorkersデプロイとD1マイグレーションに必要な権限を持つトークン
+- `CLOUDFLARE_API_TOKEN`: Workersのデプロイに必要な権限を持つトークン
 - `CLOUDFLARE_ACCOUNT_ID`: デプロイ先CloudflareアカウントID
 
-workflowはテスト、ビルド、リモートD1マイグレーション、Workerデプロイの順で実行します。テストかビルドが失敗した場合はデプロイされません。
-
-## 受付データの確認
-
-過去にフォームで受け付けた記録は、現行D1 `remex` へコピーしません。新しいLINE相談は本サイトのD1へ保存されません。
+workflowはテスト、ビルド、Workerデプロイの順で実行します。テストかビルドが失敗した場合はデプロイされません。
 
 ## LINEでの相談受付
 
-新しいご相談はLINEのみで受け付けます。サイトの相談ボタンから[LIFF事前相談フォーム](https://liff.line.me/2011950025-CXAIFaev)を開き、入力内容を確認後、LINE公式アカウントとのトーク画面へ移動します。内容はLINEの入力欄に下書きされるため、お客様が内容を確認して送信します。フォーム入力内容は本サイトのサーバーやD1に保存されません。ウェブフォームは終了しており、旧フォームAPIも新規送信を受け付けません。
+新しいご相談はLINEのみで受け付けます。サイトの相談ボタンから[LIFF事前相談フォーム](https://liff.line.me/2011950025-CXAIFaev)を開き、入力内容を確認後、LINE公式アカウントとのトーク画面へ移動します。内容はLINEの入力欄に下書きされるため、お客様が内容を確認して送信します。フォーム入力内容は本サイトのサーバーに保存されません。ウェブフォームは終了しており、旧フォームAPIも新規送信を受け付けません。
 
 事前相談フォームはLINE LoginチャンネルのLIFFアプリ（LIFF ID: `2011950025-CXAIFaev`、URL: `https://liff.line.me/2011950025-CXAIFaev`）で開きます。Endpoint URLは `https://remex-site.suuu-sh.workers.dev/apply`、画面サイズはFullです。フォームは `oaMessage` URLスキームで公式アカウントとのトークに入力文をセットします。ユーザーがLINEアプリ上で送信するまで、相談内容はRemexに届きません。LIFFは必須の `openid` のみを設定し、RemexフォームではLINEのユーザー識別情報を取得・保存しません。`profile` と `chat_message.write` 権限は付けません。
 
-フォームの項目・送信文面は `src/components/PreApplicationPage.tsx` と `src/preApplication.ts` にあります。LIFFアプリは静的アセットとして配信し、D1やMessaging APIのアクセストークンを使いません。旧フォーム通知用のLINE Messaging API処理は停止しており、関連するCloudflare secretsが設定済みでも現在は読み取り・使用しません。secretの変更・削除はこの変更では行っていません。
+フォームの項目・送信文面は `src/components/PreApplicationPage.tsx` と `src/preApplication.ts` にあります。LIFFアプリは静的アセットとして配信し、Messaging APIのアクセストークンを使いません。旧フォーム通知用のLINE Messaging API処理は停止しており、関連するCloudflare secretsが設定済みでも現在は読み取り・使用しません。secretの変更・削除はこの変更では行っていません。
 
 ### 事業者情報の開示依頼が届いたら
 
@@ -111,4 +102,4 @@ Cloudflare Web Analyticsを `remex-site.suuu-sh.workers.dev` に設定し、本�
 
 ## データ保護
 
-`data/`、`.env*`、`.dev.vars*`、`.wrangler/` はGit対象外です。受付データ、APIキー、Cloudflare認証情報をコミットしないでください。Cloudflare本番D1へのアクセスは必要最小限にしてください。
+`data/`、`.env*`、`.dev.vars*`、`.wrangler/` はGit対象外です。受付データ、APIキー、Cloudflare認証情報をコミットしないでください。
