@@ -21,9 +21,9 @@ npm run dev
 
 LP: http://127.0.0.1:5173 / API: http://127.0.0.1:3001
 
-## English pages
+## Language selection
 
-The English site is available at `/en/`, `/en/pricing/`, and `/en/apply/`. Japanese remains at `/`, `/pricing/`, and `/apply/`. The URL is the source of truth for language; a `?lang=en` query is also honored for LINE LIFF redirects. `npm run build` generates static language-specific HTML and SEO metadata under `dist/` while both languages use the same bundled app assets. The request page is `noindex` in both languages.
+Japanese and English are available on the same page URL. The language switch updates the page immediately and saves the choice for the next visit without changing the URL. On a first visit, `?lang=ja|en` (including a LIFF `liff.state` query) and legacy `/en/` URLs are accepted as compatibility fallbacks. The language choice is also reflected in the document title and metadata. The `/apply/` request page is `noindex`.
 
 ```sh
 npm test

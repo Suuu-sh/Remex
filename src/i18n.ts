@@ -1,21 +1,26 @@
-export type Locale = 'ja' | 'en';
+import {useSyncExternalStore} from 'react';
 
+export type Locale = 'ja' | 'en';
+const STORAGE_KEY = 'remex-locale';
+const listeners = new Set<() => void>();
 const isLocale = (value: string | null): value is Locale => value === 'ja' || value === 'en';
+let selectedLocale: Locale | undefined;
+
+function readStoredLocale(): Locale | undefined {
+  try {
+    const value = typeof window === 'undefined' ? null : window.localStorage.getItem(STORAGE_KEY);
+    return isLocale(value) ? value : undefined;
+  } catch { return undefined; }
+}
 
 function queryLocale(search: string): Locale | undefined {
   const params = new URLSearchParams(search);
   const direct = params.get('lang');
   if (isLocale(direct)) return direct;
-
-  // LIFF may carry the original query string inside liff.state after its primary redirect.
-  // Read it only; the app intentionally does not rewrite the URL or interact with LIFF tokens.
   const state = params.get('liff.state');
   if (state) {
     const candidates = [state];
-    try {
-      const decoded = decodeURIComponent(state);
-      if (decoded !== state) candidates.push(decoded);
-    } catch { /* malformed state is ignored */ }
+    try { const decoded = decodeURIComponent(state); if (decoded !== state) candidates.push(decoded); } catch { /* malformed state is ignored */ }
     for (const candidate of candidates) {
       const queryAt = candidate.indexOf('?');
       const fragmentAt = candidate.indexOf('#');
@@ -27,31 +32,45 @@ function queryLocale(search: string): Locale | undefined {
 }
 
 export function getLocale(): Locale {
+  if (selectedLocale) return selectedLocale;
+  const stored = readStoredLocale();
+  if (stored) return stored;
   if (typeof window === 'undefined') return 'ja';
   const fromQuery = queryLocale(window.location.search);
   if (fromQuery) return fromQuery;
   return /^\/en(?:\/|$)/.test(window.location.pathname) ? 'en' : 'ja';
 }
 
+export function setLocale(locale: Locale): void {
+  selectedLocale = locale;
+  try { window.localStorage.setItem(STORAGE_KEY, locale); } catch { /* private browsing or storage disabled */ }
+  listeners.forEach(listener => listener());
+}
+
+export function subscribeLocale(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
 export function useLocale(): Locale {
-  return getLocale();
+  return useSyncExternalStore(subscribeLocale, getLocale, () => 'ja');
 }
 
 export function text(ja: string, en: string): string {
   return getLocale() === 'en' ? en : ja;
 }
 
-export function localeHref(path: string, locale: Locale = getLocale()): string {
+// Kept for source compatibility; newly generated internal links are locale-neutral.
+export function localeHref(path: string, _locale: Locale = getLocale()): string {
   if (/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(path) || path.startsWith('#')) return path;
   const hashIndex = path.indexOf('#');
   const hash = hashIndex >= 0 ? path.slice(hashIndex) : '';
-  const withoutHash = hashIndex >= 0 ? path.slice(0, hashIndex) : path;
-  const queryIndex = withoutHash.indexOf('?');
-  const query = queryIndex >= 0 ? withoutHash.slice(queryIndex) : '';
-  let pathname = queryIndex >= 0 ? withoutHash.slice(0, queryIndex) : withoutHash;
+  const beforeHash = hashIndex >= 0 ? path.slice(0, hashIndex) : path;
+  const queryIndex = beforeHash.indexOf('?');
+  let pathname = queryIndex >= 0 ? beforeHash.slice(0, queryIndex) : beforeHash;
+  const query = queryIndex >= 0 ? beforeHash.slice(queryIndex) : '';
   if (!pathname) pathname = '/';
   if (!pathname.startsWith('/')) pathname = `/${pathname}`;
   pathname = pathname.replace(/^\/en(?=\/|$)/, '') || '/';
-  if (!pathname.startsWith('/')) pathname = `/${pathname}`;
-  return `${locale === 'en' ? '/en' : ''}${pathname === '/' && locale === 'en' ? '' : pathname}${query}${hash}` || '/';
+  return `${pathname}${query}${hash}`;
 }

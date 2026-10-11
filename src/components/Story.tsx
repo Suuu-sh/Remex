@@ -17,10 +17,9 @@ export function Marquee() {
   );
 }
 
-const manifesto = getLocale() === 'en' ? 'Remex visits the places on your mind and helps you find out what they’re really like.' : 'Remexは、あなたが気になっている場所へ足を運び、「実際どうなんだろう？」を、一緒に確かめます。';
-
 export function Manifesto() {
   const [ref, progress] = useScrollProgress<HTMLDivElement>(0.9, 0.55);
+  const manifesto = getLocale() === 'en' ? 'Remex visits the places on your mind and helps you find out what they’re really like.' : 'Remexは、あなたが気になっている場所へ足を運び、「実際どうなんだろう？」を、一緒に確かめます。';
   const chars = Array.from(manifesto);
   const {audiences} = getLocalizedContent(getLocale());
   const lit = Math.round(progress * chars.length);

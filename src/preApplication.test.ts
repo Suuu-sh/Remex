@@ -42,3 +42,13 @@ test('English pre-application message uses English labels and preserves entered 
   assert.doesNotMatch(message, /場所:|相談内容:|希望プラン:|詳細な内容:/);
   assert.ok(createOfficialAccountDraftUrl('@034laqhf', message).includes(encodeURIComponent(message)));
 });
+
+test('stable purpose and plan choices are translated in the current locale', () => {
+  const draft = {place: 'Shibuya', purpose: 'move', plan: '60', details: 'Check the route.'};
+  const japanese = buildPreApplicationMessage(draft, 'ja');
+  const english = buildPreApplicationMessage(draft, 'en');
+  assert.match(japanese, /相談内容: 引っ越し候補地の確認/);
+  assert.match(japanese, /希望プラン: 60分（現地作業 ¥9,900）/);
+  assert.match(english, /Purpose: Check a potential neighborhood for a move/);
+  assert.match(english, /Preferred plan: 60 minutes \(on-site work ¥9,900\)/);
+});
