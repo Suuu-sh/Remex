@@ -6,12 +6,12 @@ import LanguageSwitch from './LanguageSwitch';
 const LINE_BASIC_ID = '@034laqhf';
 const initialDraft: PreApplicationDraft = {place: '', purpose: '', plan: '', details: ''};
 const purposes = [
-  ['引っ越し候補地の確認', 'Check a potential neighborhood for a move'],
-  ['店舗・物件の現地確認', 'Check a shop or property in person'],
-  ['イベント・展示の代理体験', 'Attend an event or exhibition on my behalf'],
-  ['商品・展示品の確認', 'Check a product or displayed item'],
-  ['閉店前・取り壊し前の記録', 'Document a place before it closes or is demolished'],
-  ['その他', 'Other'],
+  ['move', '引っ越し候補地の確認', 'Check a potential neighborhood for a move'],
+  ['property', '店舗・物件の現地確認', 'Check a shop or property in person'],
+  ['event', 'イベント・展示の代理体験', 'Attend an event or exhibition on my behalf'],
+  ['product', '商品・展示品の確認', 'Check a product or displayed item'],
+  ['record', '閉店前・取り壊し前の記録', 'Document a place before it closes or is demolished'],
+  ['other', 'その他', 'Other'],
 ] as const;
 
 export default function PreApplicationPage() {
@@ -34,13 +34,14 @@ export default function PreApplicationPage() {
   const [consented, setConsented] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => { setError(''); setConsented(false); }, [locale]);
+
   useEffect(() => {
-    document.title = text('事前相談フォーム | Remex', 'Pre-application | Remex');
     const robots = document.querySelector('meta[name="robots"]') ?? document.createElement('meta');
     robots.setAttribute('name', 'robots');
     robots.setAttribute('content', 'noindex, nofollow');
     document.head.appendChild(robots);
-  }, [locale]);
+  }, []);
 
   function update<K extends keyof PreApplicationDraft>(key: K, value: PreApplicationDraft[K]) {
     setDraft(current => ({...current, [key]: value}));
@@ -138,7 +139,6 @@ export default function PreApplicationPage() {
             <form
               className="apply-question"
               aria-labelledby="question-title"
-              key={`${locale}-${step}`}
               noValidate
               onSubmit={event => {
                 event.preventDefault();
@@ -160,7 +160,7 @@ export default function PreApplicationPage() {
                   <span className="sr-only">{questions[step].label}</span>
                   <select id="apply-purpose" name="purpose" required value={draft.purpose} aria-invalid={Boolean(error)} aria-describedby={error ? 'apply-error' : undefined} onChange={event => update('purpose', event.target.value)}>
                     <option value="">{text('選択してください', 'Select a purpose')}</option>
-                    {purposes.map(([ja, english]) => <option key={ja} value={text(ja, english)}>{text(ja, english)}</option>)}
+                    {purposes.map(([id, ja, english]) => <option key={id} value={id}>{text(ja, english)}</option>)}
                   </select>
                 </label>
               )}
@@ -170,9 +170,9 @@ export default function PreApplicationPage() {
                   <span className="sr-only">{questions[step].label}</span>
                   <select id="apply-plan" name="plan" value={draft.plan} onChange={event => update('plan', event.target.value)}>
                     <option value="">{text('相談して決めたい', 'I would like to discuss this')}</option>
-                    <option>{text('30分（現地作業 ¥6,600）', '30 minutes (on-site work ¥6,600)')}</option>
-                    <option>{text('60分（現地作業 ¥9,900）', '60 minutes (on-site work ¥9,900)')}</option>
-                    <option>{text('90分（現地作業 ¥13,200）', '90 minutes (on-site work ¥13,200)')}</option>
+                    <option value="30">{text('30分（現地作業 ¥6,600）', '30 minutes (on-site work ¥6,600)')}</option>
+                    <option value="60">{text('60分（現地作業 ¥9,900）', '60 minutes (on-site work ¥9,900)')}</option>
+                    <option value="90">{text('90分（現地作業 ¥13,200）', '90 minutes (on-site work ¥13,200)')}</option>
                   </select>
                   <small>{draft.plan ? text('別途、往復交通費などがかかる場合があります。', 'Round-trip transportation and other costs may apply separately.') : text('プランは選ばなくても次へ進めます。', 'You can continue without choosing a plan.')}{' '}<a href={localeHref('/pricing')} target="_blank" rel="noreferrer">{text('料金の詳細', 'Pricing details')}</a></small>
                 </label>
