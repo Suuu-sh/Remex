@@ -2,14 +2,25 @@ import {useEffect, useRef, useState} from 'react';
 import LineButton from './LineButton';
 import {text} from '../i18n';
 
+const clips = [
+  {src: '/media/tokyo-residential-walk.mp4', poster: '/media/tokyo-residential-walk-poster.jpg'},
+  {src: '/media/tokyo-residential-walk-later.mp4', poster: '/media/tokyo-residential-walk-later-poster.jpg'},
+];
+const sourceUrl = 'https://www.pexels.com/video/peaceful-suburban-street-in-tokyo-35306935/';
+const sceneDuration = 6000;
+const fadeDuration = 800;
+
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [active, setActive] = useState(0);
+  const [outgoing, setOutgoing] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [blocked, setBlocked] = useState(false);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<number[]>([]);
+  const allFailed = failed.length === clips.length;
   const [available, setAvailable] = useState(true);
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -23,31 +34,66 @@ export default function Hero() {
     return () => { observer.disconnect(); preference.removeEventListener('change', update); document.removeEventListener('visibilitychange', update); };
   }, []);
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (paused || reduced || !available || blocked || failed) {
-      video.pause();
-    } else {
-      video.muted = true;
-      void video.play().catch((error: unknown) => {
-        // Pausing or removing the source can interrupt a pending play request.
-        if (error instanceof DOMException && error.name === 'AbortError') return;
-        setBlocked(true);
-      });
-    }
-  }, [paused, reduced, available, blocked, failed]);
+    videoRefs.current.forEach((video, index) => {
+      if (!video) return;
+      if (paused || reduced || !available || blocked || failed.includes(index) || (index !== active && index !== outgoing)) {
+        video.pause();
+      } else {
+        video.muted = true;
+        void video.play().catch((error: unknown) => {
+          if (error instanceof DOMException && error.name === 'AbortError') return;
+          if (index === active) setBlocked(true);
+        });
+      }
+    });
+  }, [paused, reduced, available, blocked, failed, active, outgoing]);
+
+  useEffect(() => {
+    if (outgoing === null) return;
+    const timer = window.setTimeout(() => setOutgoing(null), fadeDuration);
+    return () => window.clearTimeout(timer);
+  }, [outgoing]);
+
+  useEffect(() => {
+    if (paused || reduced || !available || blocked || !playing || allFailed) return;
+    let cancelled = false;
+    const timer = window.setTimeout(async () => {
+      const next = clips.map((_, offset) => (active + offset + 1) % clips.length).find(index => index !== active && !failed.includes(index));
+      if (next === undefined) return;
+      const video = videoRefs.current[next];
+      if (!video) return;
+      try {
+        // Keep the current scene visible until the next video's playback is ready.
+        video.currentTime = 0;
+        video.muted = true;
+        await video.play();
+        if (cancelled) { video.pause(); return; }
+        setOutgoing(active);
+        setActive(next);
+      } catch {
+        // Leave the current scene playing rather than fading to an unavailable clip.
+      }
+    }, sceneDuration);
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [paused, reduced, available, blocked, playing, allFailed, active, failed]);
+
+  useEffect(() => {
+    if (!failed.includes(active)) return;
+    const fallback = clips.findIndex((_, index) => !failed.includes(index));
+    if (fallback !== -1) { setOutgoing(null); setActive(fallback); }
+  }, [failed, active]);
+
   const togglePlayback = () => {
-    const video = videoRef.current;
+    const video = videoRefs.current[active];
     if (!video) return;
     if (playing) {
       setPaused(true);
-      video.pause();
+      videoRefs.current.forEach(item => item?.pause());
     } else {
       setPaused(false);
       setBlocked(false);
       video.muted = true;
       void video.play().catch((error: unknown) => {
-        // Pausing or removing the source can interrupt a pending play request.
         if (error instanceof DOMException && error.name === 'AbortError') return;
         setBlocked(true);
       });
@@ -55,8 +101,10 @@ export default function Hero() {
   };
   return (
     <section ref={ref} className="hero hero-cinematic" id="top" data-dark>
-      <div className="cinema-scene" aria-hidden="true">
-        <video ref={videoRef} className="cinema-video" src={reduced || failed ? undefined : '/media/tokyo-residential-walk.mp4'} poster="/media/tokyo-residential-walk-poster.jpg" muted playsInline loop preload={reduced ? 'none' : 'metadata'} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onError={() => { setFailed(true); setPlaying(false); }} tabIndex={-1}/>
+      <div className={`cinema-scene${paused ? ' is-paused' : ''}`} aria-hidden="true">
+        {clips.map((clip, index) => (
+          <video key={clip.src} ref={element => { videoRefs.current[index] = element; }} className={`cinema-video${index === active ? ' is-active' : index === outgoing ? ' is-outgoing' : ''}`} src={reduced || failed.includes(index) ? undefined : clip.src} poster={clip.poster} muted playsInline loop preload={reduced ? 'none' : 'auto'} onPlay={() => { if (index === active) setPlaying(true); }} onPause={() => { if (index === active) setPlaying(false); }} onError={() => { setFailed(items => items.includes(index) ? items : [...items, index]); if (index === active) setPlaying(false); }} tabIndex={-1}/>
+        ))}
       </div>
       <div className="hero-inner">
         <div className="hero-copy">
@@ -74,8 +122,8 @@ export default function Hero() {
             <div><dt>{text('基本料金', 'Base price')}</dt><dd>¥<b>6,600</b>{text('〜', '+')}</dd></div>
           </dl>
           <div className="hero-animation-controls">
-            <a href="https://www.pexels.com/video/peaceful-suburban-street-in-tokyo-35306935/" target="_blank" rel="noopener noreferrer">{text('東京の街並み／イメージ映像（素材）', 'Tokyo streets / stock footage')} ↗</a>
-            <button type="button" onClick={togglePlayback} aria-pressed={!playing} disabled={reduced || failed} aria-label={playing ? text('背景動画を一時停止', 'Pause background video') : text('背景動画を再生', 'Play background video')}>{failed ? text('映像を読み込めません', 'Video unavailable') : reduced ? text('端末設定により静止画を表示', 'Still image: reduced motion') : playing ? text('Ⅱ 一時停止', 'Ⅱ Pause') : text('▶ 再生', '▶ Play')}</button>
+            <a href={sourceUrl} target="_blank" rel="noopener noreferrer">{text('東京の街並み／イメージ映像（素材）', 'Tokyo streets / stock footage')} <span className="scene-count">{active + 1}/{clips.length}</span> ↗</a>
+            <button type="button" onClick={togglePlayback} aria-pressed={!playing} disabled={reduced || allFailed} aria-label={playing ? text('背景動画を一時停止', 'Pause background video') : text('背景動画を再生', 'Play background video')}>{allFailed ? text('映像を読み込めません', 'Video unavailable') : reduced ? text('端末設定により静止画を表示', 'Still image: reduced motion') : playing ? text('Ⅱ 一時停止', 'Ⅱ Pause') : text('▶ 再生', '▶ Play')}</button>
           </div>
         </div>
       </div>

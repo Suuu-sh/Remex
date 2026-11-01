@@ -33,7 +33,7 @@
     "radius": {},
     "shadows": {},
     "motion": {
-      "principle": "Static illustrations; no auto-cycling content; respect reduced motion"
+      "principle": "Only the hero cycles real, commercially licensed Tokyo footage approximately every 6 seconds with a 0.8-second crossfade; text and lower sections stay static. Pause playback/cycling offscreen, in hidden tabs and on request. Reduced motion shows a static poster."
     },
     "density": "comfortable"
   },
@@ -58,7 +58,12 @@
       "New dependencies for presentational components"
     ]
   },
-  "decisions": [],
+  "decisions": [
+    {
+      "date": "2026-11-02",
+      "decision": "User requested several real-footage hero scenes switching every few seconds. Use a 6-second scene duration and 0.8-second crossfade; keep pause, reduced-motion poster and offscreen/hidden-tab pausing. Currently two temporal excerpts from the same verified Tokyo stock source, not different locations."
+    }
+  ],
   "evidence": [
     {
       "fact": "project.stack:react",

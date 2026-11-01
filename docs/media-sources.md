@@ -16,3 +16,17 @@
 - Presentation: responsive `object-fit: cover`, preserving aspect ratio; the desktop crop emphasizes houses and roadway. No CSS zoom/parallax is applied to the footage. Text and a readability overlay are separate layers.
 - Review: extracted 0/3/6/10-second frames confirm real forward camera movement (road markings and a manhole pass beneath the camera; poles/houses approach). No prominent foreground face or adult advertisement was observed in the selected excerpt. This is a visual assessment, not a guarantee of third-party rights clearance.
 - Use is limited to an integrated Remex website background and poster; there is no stock download/gallery feature. Do not reuse as a standalone stock collection.
+
+## Alternating hero scenes (2026-11-02)
+
+The hero now alternates two **temporal excerpts of the same Pexels item 35306935**, not different filming locations or separate contributors. The licensing and use boundaries above apply to both.
+
+| Scene | Integrated file | Original source range | Duration | Output |
+| --- | --- | --- | --- | --- |
+| 1 | `public/media/tokyo-residential-walk.mp4` | 0–14 seconds | 14 seconds | Existing H.264 720×1280, no audio |
+| 2 | `public/media/tokyo-residential-walk-later.mp4` | 12–20 seconds | 8 seconds | H.264 720×1280, approximately 1.6 Mbps, no audio |
+
+- Scene 2 uses the same native AVFoundation extraction and network-optimized H.264 encoding workflow. Its poster is `public/media/tokyo-residential-walk-later-poster.jpg`, derived from its first frame.
+- Playback starts each scene at its beginning, so the usual six-second display windows show source 0–6 and 12–18 seconds respectively. There is a 0.8-second crossfade after the incoming video starts successfully. A loading failure leaves the current scene visible rather than fading to black.
+- Both the media and switching timer stop for user pause, reduced motion, an offscreen hero, or a hidden document. Reduced motion does not request video files and uses the opening poster. The source link is valid for either scene; the visible scene counter is not a location claim.
+- Additional candidate checks rejected stationary cameras and inaccurate Tokyo metadata: item 34654546 visibly shows Kamakura Komachi-dori, while 35187988 shows Nishikawaguchi. Neither is included. Other checked shots did not establish meaningful forward walking. No unverified place or stationary shot was substituted to increase the scene count.
