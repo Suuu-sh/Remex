@@ -1,14 +1,12 @@
 import {getLocalizedContent} from '../content';
-import {trackPointer, vars} from '../hooks';
 import {Check} from './Icons';
-import LineButton from './LineButton';
 import {getLocale, text} from '../i18n';
 
 const art = {
   moving: (
     <svg viewBox="0 0 200 120" aria-hidden="true">
       <path d="M0 84h200M0 40h200M60 0v120M140 0v120" stroke="currentColor" strokeWidth="5" opacity=".12"/>
-      <path className="lr-route" d="M24 100 60 84h80V46l30-16" fill="none" stroke="var(--orange)" strokeWidth="2.5" strokeDasharray="5 6" strokeLinecap="round"/>
+      <path d="M24 100 60 84h80V46l30-16" fill="none" stroke="var(--orange)" strokeWidth="2.5" strokeDasharray="5 6" strokeLinecap="round"/>
       <rect x="14" y="94" width="20" height="14" rx="2" fill="currentColor"/>
       <path d="M160 30l12-11 12 11v14h-24Z" fill="none" stroke="currentColor" strokeWidth="1.5"/>
       <rect x="168" y="34" width="8" height="10" fill="var(--orange)"/>
@@ -20,16 +18,16 @@ const art = {
       <path d="M24 34h152l-8-16H32Z" fill="none" stroke="currentColor" strokeWidth="1.5"/>
       <rect x="44" y="60" width="54" height="40" fill="none" stroke="currentColor" strokeWidth="1.2" opacity=".6"/>
       <rect x="114" y="58" width="40" height="62" fill="currentColor" opacity=".18"/>
-      <g className="lr-notice">
+      <g>
         <rect x="58" y="66" width="26" height="30" fill="#f3e6cf"/>
         <path d="M63 74h16M63 80h16M63 86h10" stroke="#3a2a1c" strokeWidth="1.4"/>
       </g>
-      <text x="100" y="30" fontSize="9" textAnchor="middle" fill="currentColor" letterSpacing="3">THANK YOU</text>
+      <path d="M72 26h56" stroke="currentColor" strokeWidth="2"/>
     </svg>
   ),
   business: (
     <svg viewBox="0 0 200 120" aria-hidden="true">
-      <g className="lr-tag">
+      <g>
         <path d="M122 44h58v18h-58Z" fill="var(--orange)"/>
         <text x="151" y="57" fontSize="8.5" fontWeight="700" textAnchor="middle" fill="#fff">{text('テナント募集', 'FOR LEASE')}</text>
       </g>
@@ -44,58 +42,26 @@ const art = {
 };
 
 export default function UseCases() {
-  const {useCases, useCaseRules} = getLocalizedContent(getLocale());
-  const ticker = getLocale() === 'en' ? ['CASE 01', 'Potential home', 'CASE 02', 'Shop or property', 'CASE 03', 'Before a shop closes', 'AND MORE', 'Ask us'] : ['CASE 01', '引っ越し候補地', 'CASE 02', '店舗・物件の確認', 'CASE 03', '閉店前の記録', 'AND MORE', 'ご相談ください'];
+  const {useCases, useCaseRules, uses} = getLocalizedContent(getLocale());
   return (
-    <section id="cases" className="last" data-dark>
-      <div className="last-ticker" aria-hidden="true">
-        <div className="marquee-track">
-          {[0, 1].map(k => (
-            <div className="marquee-row" key={k}>
-              {ticker.map(t => <span key={t}>{t}<i>●</i></span>)}
-            </div>
-          ))}
-        </div>
+    <section id="service" className="section service-cases">
+      <div className="section-heading">
+        <div><p className="section-label">{text('01 / サービス内容', '01 / The service')}</p><h2>{text('気になる場所を、代わりに確認。', 'What you can request')}</h2></div>
+        <p>{text('目的と確認したい点を伺って、訪問内容を決めます。個人・法人どちらもご相談いただけます。', 'We agree on the visit and checkpoints with you in advance. For individuals and businesses.')}</p>
       </div>
-      <div className="last-inner">
-        <div className="last-head">
-          <div>
-            <p className="eyebrow" data-reveal><span className="dot"/> USE CASES</p>
-            <h2 data-reveal>
-            <span className="last-kicker">{text('活用例', 'USE CASES')}</span>
-              {getLocale() === 'en' ? <>Here are a few<br/>ways to use Remex.</> : <>たとえば、<br/>こんな使い方。</>}
-            </h2>
-          </div>
-          <p data-reveal>
-            {getLocale() === 'en' ? <>One service: we visit a place and document it for you.<br/>Here are a few ways people might use it.</> : <>Remexのサービスはひとつだけ。あなたの代わりに現地へ行き、記録することです。<br/>目的に合わせて、こんなふうに使えます。</>}
-          </p>
-        </div>
-
-        <div className="film">
-          {useCases.map((r, i) => (
-            <article key={r.n} className="frame" data-reveal style={vars({'--delay': `${i * 120}ms`})} onPointerMove={trackPointer}>
-              <span className="sprockets" aria-hidden="true"/>
-              <div className="frame-top mono">
-                <span>{r.en}</span>
-                <span>FR.{r.n}</span>
-              </div>
-              <div className="frame-art">{art[r.art]}</div>
-              <h3>{r.title.split('、').map((part, j, all) => <span key={j}>{part}{j < all.length - 1 && <>、<br/></>}</span>)}</h3>
-              <p>{r.text}</p>
-              <small>{r.note}</small>
-              <span className="sprockets bottom" aria-hidden="true"/>
-            </article>
-          ))}
-        </div>
-
-        <div className="last-rules" data-reveal>
-          <p className="mono">{text('HOW WE RECORD', 'HOW WE WORK')}</p>
-          <ul>
-            {useCaseRules.map(rule => <li key={rule}><Check size={12}/>{rule}</li>)}
-          </ul>
-          <LineButton label={text('LINEで使い方を相談', 'Ask us on LINE')}/>
-        </div>
+      <div id="cases" className="case-grid">
+        {useCases.map(r => (
+          <article className="case-card" key={r.n}>
+            <div className="case-art"><span className="mono">{r.n}</span>{art[r.art]}</div>
+            <h3>{r.title}</h3><p>{r.text}</p><small>{r.note}</small>
+          </article>
+        ))}
       </div>
+      <div className="additional-uses">
+        <h3>{text('このような確認も、ご相談ください。', 'Other visits you can request')}</h3>
+        <ul>{uses.slice(2).map(use => <li key={use.n}><strong>{use.title}</strong><p>{use.text}</p></li>)}</ul>
+      </div>
+      <div className="case-conditions"><strong>{text('訪問・記録について', 'Visit conditions')}</strong><ul>{useCaseRules.map(rule => <li key={rule}><Check size={14}/>{rule}</li>)}</ul></div>
     </section>
   );
 }

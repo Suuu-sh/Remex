@@ -10,8 +10,8 @@ export function Safety() {
     <section className="safety" id="safety" data-dark>
       <div className="safety-inner">
         <div className="safety-head">
-          <p className="eyebrow" data-reveal><span className="dot"/> TRUST, BEFORE EVERYTHING.</p>
-          <h2 data-reveal>{getLocale() === 'en' ? <>Your peace of mind<br/>comes first.</> : <>安心して頼めることを、<br/>いちばんに。</>}</h2>
+          <p className="section-label">{text('お引き受けする範囲', 'Scope and safety')}</p>
+          <h2 data-reveal>{text('訪問のルールと、お約束。', 'Our rules for every visit.')}</h2>
           <p data-reveal>{getLocale() === 'en' ? <>Remex is a small, owner-operated service.<br/>We’ll be clear about what we can and can’t do.</> : <>Remexは、運営者自身が対応する小さなサービスです。<br/>できること・できないことを、訪問前にきちんとお伝えします。</>}</p>
         </div>
         <div className="principles">
@@ -24,7 +24,7 @@ export function Safety() {
           ))}
         </div>
         <div className="refusals" data-reveal>
-          <p className="mono">{text('WE DON’T DO', 'WE DON’T DO')}</p>
+          <p className="mono">{text('対応できないこと', 'Requests we decline')}</p>
           <ul>
             {refusals.map(r => <li key={r}><Cross size={12}/>{r}</li>)}
           </ul>
@@ -57,8 +57,8 @@ export function Faq() {
   return (
     <section id="faq" className="section faq">
       <div>
-        <p className="eyebrow" data-reveal><span className="dot"/> QUESTIONS &amp; ANSWERS</p>
-        <h2 data-reveal>{text('気になること。', 'Questions?')}</h2>
+        <p className="section-label">{text('よくある質問', 'FAQ')}</p>
+        <h2 data-reveal>{text('ご依頼の前に。', 'Before you book.')}</h2>
         <p className="faq-side" data-reveal>{text('ここにないことも、LINE公式アカウントから気軽にご相談ください。', 'Ask us anything else through our official LINE account.')}</p>
       </div>
       <div className="faq-list">
