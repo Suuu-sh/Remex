@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "project": {
+    "name": "remex",
+    "productType": "Bilingual on-site visit service landing page",
+    "stack": [
+      "react",
+      "vite"
+    ]
+  },
+  "sources": {
+    "tokens": [
+      "src/style.css"
+    ],
+    "components": [
+      "src/components"
+    ],
+    "assets": [
+      "public/favicon.svg"
+    ],
+    "instructions": []
+  },
+  "design": {
+    "colorMode": "light",
+    "colors": {
+      "paper": "#f6f2ea",
+      "ink": "#14232a",
+      "orange": "#f65f32",
+      "orangeDeep": "#dc4519"
+    },
+    "typography": {},
+    "spacing": {},
+    "radius": {},
+    "shadows": {},
+    "motion": {
+      "principle": "Static illustrations; no auto-cycling content; respect reduced motion"
+    },
+    "density": "comfortable"
+  },
+  "components": {
+    "installed": [],
+    "preferredPrimitives": [
+      "LineButton",
+      "Header",
+      "Footer"
+    ],
+    "patterns": []
+  },
+  "constraints": {
+    "must": [
+      "Preserve Japanese and English content and links",
+      "Keep service availability, pricing, permission requirements and legal terms accurate",
+      "Clearly label fictional illustrations; never imply real customer evidence"
+    ],
+    "avoid": [
+      "Generic slogans or decorative English eyebrows",
+      "Gradients, glass, excessive animation",
+      "New dependencies for presentational components"
+    ]
+  },
+  "decisions": [],
+  "evidence": [
+    {
+      "fact": "project.stack:react",
+      "source": "package.json"
+    },
+    {
+      "fact": "project.stack:vite",
+      "source": "package.json"
+    }
+  ],
+  "generatedAt": "2026-11-01T14:48:10.785Z"
+}

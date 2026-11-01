@@ -1,94 +1,18 @@
-import {useState} from 'react';
-import {getLocalizedContent, type Delivery as DeliveryItem} from '../content';
-import {useCycle, useInView, vars} from '../hooks';
-import {getLocale, text} from '../i18n';
+import {text} from '../i18n';
+import {Check} from './Icons';
 
 export default function Delivery() {
-  const {deliveries} = getLocalizedContent(getLocale());
-  const [paused, setPaused] = useState(false);
-  const [ref, inView] = useInView<HTMLElement>('-20% 0px');
-  const [active, setActive] = useCycle(deliveries.length, 5200, paused || !inView);
-  const current = deliveries[active];
-
   return (
-    <section id="delivery" className="section delivery" ref={ref}>
-      <div className="delivery-copy">
-        <p className="eyebrow" data-reveal><span className="dot"/> HOW YOU’LL SEE IT</p>
-        <h2 data-reveal>{getLocale() === 'en' ? <>Get a feel for the place,<br/>before you go.</> : <>行った気分まで、<br/>持ち帰ります。</>}</h2>
-        <p className="delivery-lead" data-reveal>{text('基本レポートと、撮影が許可される場合の一人称動画でお届けします。', 'We share a basic report and, when filming is permitted, an unedited first-person video.')}</p>
-        <div className="delivery-tabs" role="tablist" aria-label={text('お届け方法', 'Delivery options')} data-reveal>
-          {deliveries.map((d, i) => (
-            <button
-              key={d.id}
-              type="button"
-              role="tab"
-              id={`tab-${d.id}`}
-              aria-selected={i === active}
-              aria-controls="delivery-panel"
-              className={i === active ? 'is-active' : ''}
-              onClick={() => { setActive(i); setPaused(true); }}
-            >
-              <span className="mono">{d.en}</span>
-              <strong>{d.label}{d.badge && <span className="soon-badge">{d.badge}</span>}</strong>
-              <span className="tab-text">{d.text}</span>
-              <i className="tab-timer" style={vars({'--run': paused || !inView ? 'paused' : 'running'})} key={`${d.id}-${active}`}/>
-            </button>
-          ))}
+    <section id="delivery" className="delivery-summary">
+      <div className="delivery-summary-inner">
+        <div><p className="section-label">{text('02 / お届けするもの', '02 / Your delivery')}</p><h2>{text('基本レポートと一人称動画をお届け。', 'Your report and video')}</h2><p className="delivery-summary-lead">{text('事前に決めた確認項目に沿って、現地の様子を記録します。', 'We document the location around your agreed checkpoints.')}</p></div>
+        <div className="delivery-items">
+          <article><span className="delivery-check"><Check size={18}/></span><div><h3>{text('基本レポート', 'Basic report')}</h3><p>{text('現地で確認した内容をまとめてお届けします。確認項目はプランに応じて最大3・5・8件です。', 'A summary of the on-site observations, covering up to 3, 5, or 8 checkpoints depending on your plan.')}</p></div></article>
+          <article><span className="delivery-check"><Check size={18}/></span><div><h3>{text('未編集の一人称動画 1本', 'One unedited first-person video')}</h3><p>{text('撮影が許可される場合に、GoProで歩く目線を記録します。施設のルールに従い、撮影できない場所は事前に相談します。', 'When filming is permitted, a GoPro captures the walker’s point of view. We follow venue rules and discuss any filming restrictions in advance.')}</p></div></article>
+          <p className="delivery-unavailable">{text('写真の記録・納品、動画編集は準備中です。', 'Photo capture, photo delivery, and video editing are not yet available.')}</p>
         </div>
-      </div>
-      <div className="delivery-stage" data-reveal>
-        <div className="phone" id="delivery-panel" role="tabpanel" aria-labelledby={`tab-${current.id}`}>
-          <div className="phone-notch"/>
-          <div className="phone-screen" key={current.id}>
-            <Screen item={current}/>
-          </div>
-        </div>
-        <span className="stage-orbit" aria-hidden="true"/>
-          <span className="vf-sample">{text('※ 画面はイメージです', '* Illustration')}</span>
+        <div id="samples" className="sample-status"><strong>{text('公開サンプルについて', 'About public samples')}</strong><p>{text('現在、公開できるサンプル映像や訪問事例・お客様の声はありません。自主制作の見本は準備中です。実際のご依頼の記録を、許可なく公開・事例紹介に使うことはありません。', 'No public sample videos, visit examples, or testimonials are available yet. Self-produced samples are in preparation. Customer records will never be published or used as case studies without permission.')}</p></div>
       </div>
     </section>
   );
-}
-
-function Screen({item}: {item: DeliveryItem}) {
-  switch (item.id) {
-    case 'photo':
-      return (
-        <div className="scr scr-photo">
-          <header><strong>{text('写真での記録', 'Photo delivery')}</strong><span className="soon-badge">{text('準備中', 'Coming soon')}</span></header>
-          <div className="photo-placeholder"><span className="mono">PHOTO DELIVERY</span><strong>{text('準備中', 'Coming soon')}</strong></div>
-        </div>
-      );
-    case 'video':
-      return (
-        <div className="scr scr-video">
-          <div className="video-frame">
-            <div className="fish"><span/><span/><span/></div>
-            <span className="rec"><i/>POV</span>
-          </div>
-          <div className="video-bar"><i/></div>
-          <div className="video-meta"><span>{text('駅から徒歩ルート', 'Walk from the station')}</span><span className="mono">08:24</span></div>
-          <ul className="chapters">
-            <li><span className="mono">00:00</span>{text('改札を出る', 'Leave the station')}</li>
-            <li><span className="mono">02:40</span>{text('商店街を抜ける', 'Walk through the shopping street')}</li>
-            <li><span className="mono">05:15</span>{text('坂道を上る', 'Head up the hill')}</li>
-          </ul>
-        </div>
-      );
-    case 'edit':
-      return (
-        <div className="scr scr-edit">
-          <header><strong>{text('編集オプション', 'Editing')}</strong><span className="soon-badge">{text('準備中', 'Coming soon')}</span></header>
-          <div className="edit-preview"><span className="mono">PREVIEW</span></div>
-          <div className="edit-timeline">
-            {[38, 22, 30, 18].map((w, i) => <i key={i} style={vars({'--w': `${w}%`, '--i': i})}/>)}
-            <span className="edit-head"/>
-          </div>
-          <ul className="chapters">
-            <li><span className="mono">CUT</span>{text('見どころだけを短く', 'Short highlights')}</li>
-            <li><span className="mono">TITLE</span>{text('場所と日付を入れて', 'Add place and date')}</li>
-          </ul>
-        </div>
-      );
-  }
 }

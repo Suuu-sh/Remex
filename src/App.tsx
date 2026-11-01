@@ -2,13 +2,11 @@ import {useEffect} from 'react';
 import {useRevealAll} from './hooks';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import {Marquee, Manifesto, Services} from './components/Story';
 import Delivery from './components/Delivery';
 import UseCases from './components/UseCases';
 import {Area, Pricing, Process} from './components/Plan';
-import {Chapter, Faq, Safety} from './components/Trust';
+import {Faq, Safety} from './components/Trust';
 import PublicPolicies from './components/PublicPolicies';
-import SampleRecord from './components/SampleRecord';
 import Consultation from './components/Consultation';
 import {Footer, MobileCta} from './components/Footer';
 import PricingPage from './components/PricingPage';
@@ -26,8 +24,8 @@ export default function App() {
     const isPricing = pathname === '/pricing';
     const isApply = pathname === '/apply';
     document.title = english
-      ? (isApply ? 'Request a visit on LINE — Remex' : isPricing ? 'Pricing — Remex' : 'Remex — We’ll go there for you.')
-      : (isPricing ? '料金案内 — Remex' : isApply ? '事前相談フォーム — Remex' : 'Remex — あなたの代わりに、行ってきます。');
+      ? (isApply ? 'Request a visit on LINE — Remex' : isPricing ? 'Pricing — Remex' : 'Remex — On-site visits in Tokyo')
+      : (isPricing ? '料金案内 — Remex' : isApply ? '事前相談フォーム — Remex' : 'Remex — 東京23区の現地訪問サービス');
     const description = english
       ? 'Need someone to check a place in Tokyo? Remex visits locations in Tokyo’s 23 wards and shares a basic report and an unedited first-person video when filming is permitted.'
       : '東京23区で、気になる場所をあなたの代わりに訪ねる Remex。時間がない人、遠くて行けない人のために、基本レポートと一人称動画で現地を届けます。引っ越し先の下見から、閉店前の記録まで。';
@@ -55,22 +53,17 @@ export default function App() {
     <>
       <a className="skip-link" href="#request">{text('LINEでの相談窓口へ移動', 'Skip to consultation')}</a>
       <Header/>
-      <main>
+      <main className="landing">
         <Hero/>
-        <Marquee/>
-        <Manifesto/>
-        <Services/>
         <UseCases/>
         <Delivery/>
-        <SampleRecord/>
+        <Pricing/>
         <Process/>
         <Area/>
-        <Pricing/>
         <Safety/>
-        <Chapter/>
         <Faq/>
-        <PublicPolicies/>
         <Consultation/>
+        <PublicPolicies/>
       </main>
       <Footer/>
       <MobileCta/>

@@ -7,7 +7,7 @@ export default function Consultation() {
     <section id="request" className="request">
       <div className="request-inner">
         <div className="request-intro">
-          <p className="eyebrow" data-reveal><span className="dot"/> CONSULTATION</p>
+          <p className="section-label">{text('無料の事前相談', 'Free consultation')}</p>
           <h2 data-reveal>{getLocale() === 'en' ? <>Start with a message<br/>on LINE.</> : <>相談は、<br/>LINEから。</>}</h2>
           <p data-reveal>{text('新しいご相談は、LINE内の事前相談フォームから受け付けています。入力内容を送信するとLINE公式アカウントとのトークに届き、内容を確認して対応可否や料金をご案内します。', 'New requests are accepted through the pre-visit form in LINE. After filling it out, review the draft in our official LINE chat and press Send to submit your request. We’ll then confirm whether we can help and what it will cost.')}</p>
           <ul className="request-points" data-reveal>
@@ -20,7 +20,7 @@ export default function Consultation() {
         <div className="request-side">
           <div className="line-card" data-reveal>
             <div className="line-card-head">
-              <span className="mono">ONLY INTAKE / LINE OFFICIAL</span>
+              <span className="mono">{text('LINE公式アカウントで受付', 'Requests via our official LINE account')}</span>
               <h3>{text('まずは、LINEで事前相談。', 'Start with a request on LINE.')}</h3>
               <p>{text('場所と詳細な内容をフォームに入力。開催日時が決まっている場合は詳細な内容に記入してください。運営者の予定などにより、その日時に対応できない場合があります。内容を確認してから、LINEのトークで送信できます。', 'Enter the location and details in the form. If you have a date or time in mind, include it; availability depends on our schedule. Review your message, then send it in LINE.')}</p>
             </div>
